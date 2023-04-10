@@ -18,7 +18,7 @@ The database schema will consist of tables for users, job applications, companie
 
 <img src="JobApplicationTracker-Schema.png" />
 
-|User|-|
+|User| |
 |-|-|
 |id|unique identifier for each user|
 |name |name of the user|
@@ -27,12 +27,13 @@ The database schema will consist of tables for users, job applications, companie
 |password|hashed password for user authentication|
 
 
-|Application|-|
+|Application| |
 |-----------|--|
 |id| unique identifier for each job application|
 |user_id|foreign key to the users table|
 |company_id|foreign key to the companies table|
 |job_title|title of the job|
+|post_url| link to the job posting|
 |application _date|date when the application was submitted|
 |status|status of the application (e.g. applied, interview scheduled, rejected)|
 |notes|any notes or comments about the application|
@@ -40,6 +41,13 @@ The database schema will consist of tables for users, job applications, companie
 |salary|salary range for the job|
 |job_description|full job description for the job|
 
+|Company |  |
+|-|-|
+|id| unique identifier for each job application|
+|company_name| name of the company|
+|location| company location|
+|company_url| link to the company websit|
+|description| about the company|
 
 |Contact| |
 |-------|--|
@@ -52,18 +60,18 @@ The database schema will consist of tables for users, job applications, companie
 |notes|any notes or comments about the contact|
 
 
-|Document|-|
+|Document| |
 |-|-|
 |id|unique identifier for each document|
 |user_id|foreign key to the users table|
 |application_id|foreign key to the applications table|
-|filename|name of the file|
-|file_type|type of the file (e.g. resume, cover letter, transcript)|
+|title|name of the file|
+|category|type of the file (e.g. resume, cover letter, transcript)|
 |file_url|URL to access the file|
 
 
 
-|Task|-|
+|Task| |
 |-|-|
 |id|unique identifier for each task|
 |user_id|foreign key to the users table|
