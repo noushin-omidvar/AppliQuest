@@ -1,5 +1,5 @@
 # AppliQuest
-AppliQuest is an open-source job application tracker web app that helps job seekers organize and manage their job applications in one place.
+AppliQuest is a job application tracker web app that helps job seekers organize and manage their job applications in one place.
 
 ## 1 Goal 
 The primary goal of the Job Application Tracker website is to provide a centralized location for job seekers to manage all aspects of their job search. The website will allow job seekers to keep track of their job applications, organize their job search, and keep all their job search details in one place.
