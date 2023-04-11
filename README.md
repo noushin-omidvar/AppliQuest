@@ -14,20 +14,21 @@ The website will use job application data such as the company name, job title, a
    
 ### 4.1 Database schema
 
-The database schema will consist of tables for users, job applications, companies, job descriptions, and other relevant data. The relationships between the tables will be established to ensure data integrity and efficient querying.
+The database schema will consist of tables for users, jobs, companies, job descriptions, and other relevant data. The relationships between the tables will be established to ensure data integrity and efficient querying.
 
 <img src="JobApplicationTracker-Schema.png" />
 
 |User| |
 |-|-|
 |id|unique identifier for each user|
-|name |name of the user|
+|first_name |first name of the user|
+|last_name | last name of user |
 |username| username chosen by user|
 |email|email address of the user|
 |password|hashed password for user authentication|
 
 
-|Application| |
+|Job| |
 |-----------|--|
 |id| unique identifier for each job application|
 |user_id|foreign key to the users table|
@@ -54,7 +55,8 @@ The database schema will consist of tables for users, job applications, companie
 |id|unique identifier for each contact|
 |user_id|foreign key to the users table|
 |company_id|foreign key to the companies table|
-|name|name of the contact person at the company|
+|first_name| first name of the contact person at the company|
+|last_name| last name of the contact person at the company|
 |email|email address of the contact person|
 |phone|phone number of the contact person|
 |notes|any notes or comments about the contact|
@@ -64,7 +66,7 @@ The database schema will consist of tables for users, job applications, companie
 |-|-|
 |id|unique identifier for each document|
 |user_id|foreign key to the users table|
-|application_id|foreign key to the applications table|
+|job_id|foreign key to the jobs table|
 |title|name of the file|
 |category|type of the file (e.g. resume, cover letter, transcript)|
 |file_url|URL to access the file|
@@ -75,7 +77,7 @@ The database schema will consist of tables for users, job applications, companie
 |-|-|
 |id|unique identifier for each task|
 |user_id|foreign key to the users table|
-|application_id|foreign key to the applications table|
+|job_id|foreign key to the jobs table|
 |task_name|name of the task|
 |due_date|due date for the task|
 |notes|any notes or comments about the task|
