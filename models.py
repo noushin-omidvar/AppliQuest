@@ -31,9 +31,6 @@ class User(db.Model):
     last_name = db.Column(db.String,
                           nullable=False)
 
-    username = db.Column(db.String,
-                         nullable=False)
-
     email = db.Column(db.String,
                       nullable=False)
 
@@ -49,8 +46,11 @@ class User(db.Model):
     def __repr__(self):
         return f"<User #{self.id}: {self.first_name} {self.last_name}>"
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
     @classmethod
-    def signup(cls, first_name, last_name, username, email, password, linkedin_url, user_location):
+    def signup(cls, first_name, last_name, email, password, linkedin_url, user_location):
         """Sign up user.
 
         Hashes password and adds user to system.
@@ -62,7 +62,6 @@ class User(db.Model):
         user = User(
             first_name=first_name,
             last_name=last_name,
-            username=username,
             email=email,
             password=hashed_pwd,
             linkedin_url=linkedin_url,
@@ -74,8 +73,8 @@ class User(db.Model):
         return user
 
     @classmethod
-    def authenticate(cls, username, password):
-        """Find user with `username` and `password`.
+    def authenticate(cls, email, password):
+        """Find user with `email` and `password`.
 
         This is a class method (call it on the class, not an individual user.)
         It searches for a user whose password hash matches this password
@@ -84,8 +83,8 @@ class User(db.Model):
         If can't find matching user (or if password is wrong), returns False.
         """
 
-        # Search the database for a user with the given username
-        user = cls.query.filter_by(username=username).first()
+        # Search the database for a user with the given email
+        user = cls.query.filter_by(email=email).first()
 
         # If such a user is found, check the password hash
         if user:
@@ -150,6 +149,9 @@ class Job(db.Model):
     user = db.relationship('User', backref='jobs')
     company = db.relationship('Company', backref="jobs")
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class Company(db.Model):
     """ Company table """
@@ -170,6 +172,9 @@ class Company(db.Model):
 
     company_about = db.Column(db.String,
                               nullable=True)
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class Contact(db.Model):
@@ -205,6 +210,9 @@ class Contact(db.Model):
     user = db.relationship('User', backref='contacts')
     company = db.relationship('Company', backref="contacts")
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class Document(db.Model):
     """Documents Table"""
@@ -238,6 +246,9 @@ class Document(db.Model):
 
     user = db.relationship('User', backref='documents')
     job = db.relationship('Job', backref="documents")
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class Task(db.Model):
@@ -273,3 +284,6 @@ class Task(db.Model):
 
     user = db.relationship('User', backref='tasks')
     job = db.relationship('Job', backref="tasks")
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
