@@ -1,0 +1,31 @@
+{% extends 'base_logout.html' %} {% block title %}Sign Up{% endblock %} {% block
+content %}
+
+<div class="row justify-content-md-center">
+  <div class="col-md-7 col-lg-5">
+    <h2 class="join-message">Join Appliquest today.</h2>
+    <form method="POST" id="user_form">
+      {{ form.hidden_tag() }} {% for field in form if field.widget.input_type !=
+      'hidden' %} {% for error in field.errors %}
+      <span class="text-danger">{{ error }}</span>
+      {% endfor %} {{ field(placeholder=field.label.text, class="form-control")
+      }} {% endfor %}
+      <div class="container fw-light fs-6">
+        <p>Password must contain</p>
+        <div class="row">
+          <div class="col">
+            <p class="fs-6">8 - 20 characters</p>
+            <p class="fs-6">2 or more numbers</p>
+          </div>
+          <div class="col">
+            <p class="fs-6">upper-case letter</p>
+            <p class="fs-6">lower-case letter</p>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-lg btn-block">Sign me up!</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

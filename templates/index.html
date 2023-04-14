@@ -1,1 +1,32 @@
-<h1>AppliQuest</h1>
+{% extends 'base_logout.html' %} {% block title %} AppliQuest {% endblock %} {%
+block content %}
+<div class="container">
+  <div class="row">
+    <div class="col justify-content">
+      <h1>Organize your job search</h1>
+
+      <p>
+        Track your job applications and keep your job search organized in one
+        place.
+      </p>
+      <a href="/signup" class="btn btn-primary">start your journey here</a>
+    </div>
+    <div class="col">
+      <div style="width: 100%; position: relative">
+        <div
+          style="
+            position: absolute;
+            border-radius: 8px;
+            box-shadow: 0 0 0 1px rgba(25, 4, 69, 0.1),
+              0 10px 20px 0 rgba(25, 4, 69, 0.05);
+            background-image: url('images/advisor_heroes/advisor_hero_job_tracker.png');
+            background-size: 1199px auto;
+            height: 650px;
+            width: 100%;
+          "
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
