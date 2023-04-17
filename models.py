@@ -46,7 +46,7 @@ class User(db.Model):
     def __repr__(self):
         return f"<User #{self.id}: {self.first_name} {self.last_name}>"
 
-    def as_dict(self):
+    def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
     @classmethod
@@ -149,7 +149,7 @@ class Job(db.Model):
     user = db.relationship('User', backref='jobs')
     company = db.relationship('Company', backref="jobs")
 
-    def as_dict(self):
+    def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
@@ -173,7 +173,7 @@ class Company(db.Model):
     company_about = db.Column(db.String,
                               nullable=True)
 
-    def as_dict(self):
+    def to_dictt(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
@@ -210,7 +210,7 @@ class Contact(db.Model):
     user = db.relationship('User', backref='contacts')
     company = db.relationship('Company', backref="contacts")
 
-    def as_dict(self):
+    def to_dictt(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
@@ -247,7 +247,7 @@ class Document(db.Model):
     user = db.relationship('User', backref='documents')
     job = db.relationship('Job', backref="documents")
 
-    def as_dict(self):
+    def to_dictt(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
@@ -285,5 +285,5 @@ class Task(db.Model):
     user = db.relationship('User', backref='tasks')
     job = db.relationship('Job', backref="tasks")
 
-    def as_dict(self):
+    def to_dictt(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
