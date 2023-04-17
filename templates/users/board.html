@@ -1,21 +1,71 @@
 {% extends 'base_login.html' %} {% block title %}AppliQuest: Job board{%
 endblock %} {% block content %}
+
+<!-- Button trigger modal -->
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#exampleModal"
+>
+  + Create New Job
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Job</h1>
+      </div>
+      <div class="modal-body">
+        <form method="POST" id="user_form">
+          {{ form.hidden_tag() }} {% for field in form if
+          field.widget.input_type != 'hidden' %} {% for error in field.errors %}
+          <span class="text-danger">{{ error }}</span>
+          {% endfor %} {{ field(placeholder=field.label.text,
+          class="form-control") }} {% endfor %}
+
+          <button class="btn btn-primary btn-lg btn-block">Login</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Discard
+        </button>
+        <button type="button" class="btn btn-primary">Save Job</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container py-5">
   <div class="row">
     <!-- Start lane -->
     <div class="col-12 col-lg-4">
       <div class="card mb-3">
         <div class="card-header bg-light">
-          <h3 class="card-title h5 mb-1">Wish List</h3>
+          <h3 class="card-title h5 mb-1">Wishlist</h3>
           <small class="mb-0 text-muted">
             Aenean posuere, tortor sed cursus feugiat.
           </small>
         </div>
         <div class="card-body">
-          <div class="tasks" id="wishlist">
-            {% for job in jobs%} {% if job.status == "Wish List"%}
+          <div class="tasks" id="Wishlist">
+            {% for job in jobs%} {% if job.status == "Wishlist"%}
             <!-- Start task -->
-            <div class="card mb-3 cursor-grab">
+            <div
+              class="card mb-3 cursor-grab"
+              data-job_title="{{job.job_title}}"
+              data-job_id="{{job.id}}"
+              data-user_id="{{job.user_id}}"
+            >
               <div class="card-body">
                 <h5>{{job.job_title}}</h5>
                 <p class="mb-0">{{job.company.company_name}}</p>
@@ -53,10 +103,15 @@ endblock %} {% block content %}
           </small>
         </div>
         <div class="card-body">
-          <div class="tasks" id="applied">
+          <div class="tasks" id="Applied">
             {% for job in jobs%} {% if job.status == "Applied"%}
             <!-- Start task -->
-            <div class="card mb-3 cursor-grab">
+            <div
+              class="card mb-3 cursor-grab"
+              data-job_title="{{job.job_title}}"
+              data-job_id="{{job.id}}"
+              data-user_id="{{job.user_id}}"
+            >
               <div class="card-body">
                 <h5>{{job.job_title}}</h5>
                 <p class="mb-0">{{job.company.company_name}}</p>
@@ -94,10 +149,15 @@ endblock %} {% block content %}
           </small>
         </div>
         <div class="card-body">
-          <div class="tasks" id="interview">
+          <div class="tasks" id="Interview">
             {% for job in jobs%} {% if job.status == "Interview"%}
             <!-- Start task -->
-            <div class="card mb-3 cursor-grab">
+            <div
+              class="card mb-3 cursor-grab"
+              data-job_title="{{job.job_title}}"
+              data-job_id="{{job.id}}"
+              data-user_id="{{job.user_id}}"
+            >
               <div class="card-body">
                 <h5>{{job.job_title}}</h5>
                 <p class="mb-0">{{job.company.company_name}}</p>
@@ -135,10 +195,15 @@ endblock %} {% block content %}
           </small>
         </div>
         <div class="card-body">
-          <div class="tasks" id="offer">
+          <div class="tasks" id="Offer">
             {% for job in jobs%} {% if job.status == "Offer"%}
             <!-- Start task -->
-            <div class="card mb-3 cursor-grab">
+            <div
+              class="card mb-3 cursor-grab"
+              data-job_title="{{job.job_title}}"
+              data-job_id="{{job.id}}"
+              data-user_id="{{job.user_id}}"
+            >
               <div class="card-body">
                 <h5>{{job.job_title}}</h5>
                 <p class="mb-0">{{job.company.company_name}}</p>
@@ -176,10 +241,15 @@ endblock %} {% block content %}
           </small>
         </div>
         <div class="card-body">
-          <div class="tasks" id="rejected">
+          <div class="tasks" id="Rejected">
             {% for job in jobs%} {% if job.status == "Rejected"%}
             <!-- Start task -->
-            <div class="card mb-3 cursor-grab">
+            <div
+              class="card mb-3 cursor-grab"
+              data-job_title="{{job.job_title}}"
+              data-job_id="{{job.id}}"
+              data-user_id="{{job.user_id}}"
+            >
               <div class="card-body">
                 <h5>{{job.job_title}}</h5>
                 <p class="mb-0">{{job.company.company_name}}</p>
