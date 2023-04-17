@@ -60,7 +60,7 @@ with app.app_context():
         application_date = fake.date_between(
             start_date='-1y', end_date='today')
         status = random.choice(
-            ['Wish List', 'Applied', 'Interview', 'Offer', 'Rejected'])
+            ['Wishlist', 'Applied', 'Interview', 'Offer', 'Rejected'])
         notes = fake.text()
         job_location = fake.city()
         job_description = fake.text()
