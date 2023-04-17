@@ -138,12 +138,11 @@ def update_job(user_id, job_id):
     """Update the job """
 
     job = Job.query.get(job_id)
-
     if job is None:
         return jsonify({'error': 'Job not found'}), 404
 
     db.session.query(Job).filter(
-        id=job_id, user_id=user_id).update(request.json)
+        Job.id == job_id, Job.user_id == user_id).update(request.json)
     db.session.commit()
 
     return jsonify(job.to_dict())
@@ -370,7 +369,7 @@ def create_company():
 
 
 @app.route('/api/companies/<company_id>')
-def get_task(user_id, company_id):
+def get_company(user_id, company_id):
     """get company by company_id"""
 
     company = Company.query.get_or_404(company_id)
