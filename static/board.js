@@ -1,18 +1,20 @@
+user_id = '<%= Session["curr_user"] %>';
+console.log(user_id);
 dragula([
-  document.querySelector("#wishlist"),
-  document.querySelector("#applied"),
-  document.querySelector("#interview"),
-  document.querySelector("#offer"),
-  document.querySelector("#rejected"),
-]).on("drop", function (el, target, source, sibling) {
-  console.log(target.id);
-  console.log(source.id);
-  // $.ajax({
-  //   url: `/api/${user_id}/jobs/${job_id}`,
-  //   type: 'POST',
-  //   data: {
-  //     new_status: target.id,
-  //     old_status: source.id
-  //   }
-  // });
+  document.querySelector("#Wishlist"),
+  document.querySelector("#Applied"),
+  document.querySelector("#Interview"),
+  document.querySelector("#Offer"),
+  document.querySelector("#Rejected"),
+]).on("drop", async function (el, target, source, sibling) {
+  console.log(target);
+  console.log(source);
+  user_id = el.dataset.user_id;
+  job_id = el.dataset.job_id;
+
+  await axios.patch(`/api/users/${user_id}/jobs/${job_id}`, {
+    status: target.id,
+  });
 });
+
+$;
