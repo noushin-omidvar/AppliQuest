@@ -118,7 +118,7 @@ class Job(db.Model):
                          nullable=True)
 
     application_date = db.Column(db.Date,
-                                 nullable=False,
+                                 nullable=True,
                                  default=datetime.utcnow())
 
     status = db.Column(db.String,
