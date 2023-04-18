@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField
-from wtforms.validators import DataRequired, Email, Length
+from wtforms import StringField, PasswordField, SelectField, TextAreaField
+from wtforms.validators import DataRequired, Email, Length, URL
 import email_validator
 
 
@@ -28,4 +28,16 @@ class AddJobForm(FlaskForm):
     job_title = StringField("Job Title", validators=[DataRequired()])
     company_name = StringField("Company", validators=[DataRequired()])
     status = SelectField("Status", choices=[
-                         'Wish list', 'Applied', "Interview", "Offer", "Rejected"])
+                         'Wishlist', 'Applied', "Interview", "Offer", "Rejected"])
+
+
+class JobDetailForm(FlaskForm):
+    """Add new Job Form"""
+
+    job_title = StringField("Job Title", validators=[DataRequired()])
+    company_name = StringField("Company", validators=[DataRequired()])
+    status = SelectField("Status", choices=[
+                         'Wishlist', 'Applied', "Interview", "Offer", "Rejected"])
+    post_url = StringField("Post URL", validators=[URL()])
+    location = StringField("Location")
+    notes = TextAreaField("Notes")
