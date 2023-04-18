@@ -31,6 +31,14 @@ connect_db(app)
 # --------------------
 
 
+@app.route('/api/user_id')
+def user_id():
+    # Get the user id from the session
+    user_id = session.get(CURR_USER_KEY)
+    # Return the user id as JSON
+    return jsonify({'user_id': user_id})
+
+
 # Handling user data
 # --------------------------------
 @app.route('/api/users')
@@ -106,18 +114,18 @@ def delete_user(user_id):
 # ------------------------------
 
 @app.route('/api/users/<user_id>/jobs', methods=['POST'])
-def create_job():
+def create_job(user_id):
     """Create a new job"""
+    print('request', request)
 
-    new_job = Job(user_id=request.json['user_id'],
-                  company_id=request.json['company_id'],
+    new_job = Job(user_id=user_id,
+                  company_id=request.json['company']['id'],
                   job_title=request.json['job_title'],
-                  post_url=request.json['post_url'],
-                  application_date=request.json['application_date'],
-                  status=request.json['status'],
-                  notes=request.json['notes'],
-                  job_location=request.json['job_location'],
-                  job_description=request.json['job_description'],
+                  post_url=request.json.get('post_url', None),
+                  status=request.json.get('status', 'Wishlist'),
+                  notes=request.json.get('notes', None),
+                  job_location=request.json.get('job_location', None),
+                  job_description=request.json.get('job_description', None),
                   )
 
     db.session.add(new_job)
@@ -354,18 +362,20 @@ def delete_task(task_id):
 # Handle the companies data
 # --------------------------
 
-@app.route('/api/companiess/', methods=['POST'])
+@app.route('/api/companies/', methods=['POST'])
 def create_company():
     """Create a new company"""
 
-    new_company = Company(company_name=request.json['company_name'],
-                          company_location=request.json['company_location'],
-                          company_url=request.json['company_url'],
-                          company_about=request.json['company_about'])
+    new_company = Company(company_name=request.json.get('company_name', None),
+                          company_location=request.json.get(
+                              'company_location', None),
+                          company_url=request.json.get('company_url', None),
+                          company_about=request.json.get('company_about', None))
 
+    print(new_company)
     db.session.add(new_company)
     db.session.commit()
-    return jsonify(new_task=new_company.to_dict())
+    return jsonify(new_company=new_company.to_dict())
 
 
 @app.route('/api/companies/<company_id>')
@@ -419,6 +429,15 @@ def autocomplete_company():
         Company.company_name.ilike('%' + query + '%')).all()
     print([c.company_name for c in companies])
     return jsonify([c.company_name for c in companies])
+
+
+@app.route('/api/companies')
+def list_company():
+    """get companies"""
+
+    companies = [c.to_dict() for c in Company.query.all()]
+
+    return jsonify(companies=companies)
 
 # ------------------------
 # Set up view endpoints
@@ -538,7 +557,7 @@ def show_board():
     new_job_form = AddJobForm()
     job_detail_form = JobDetailForm()
     jobs = Job.query.all()
-    return render_template('users/board.html', jobs=jobs, new_job_form=new_job_form, job_detail_form=job_detail_form)
+    return render_template('users/board.html', user_id=g.user.id, jobs=jobs, new_job_form=new_job_form, job_detail_form=job_detail_form)
 
 
 # with app.app_context():
