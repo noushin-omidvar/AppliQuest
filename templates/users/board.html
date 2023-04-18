@@ -76,13 +76,15 @@ endblock %} {% block content %}
       <div class="card mb-3">
         <div class="card-header bg-light">
           <h3 class="card-title h5 mb-1">Wishlist</h3>
+
           <small class="mb-0 text-muted">
-            Aenean posuere, tortor sed cursus feugiat.
+            {% if jobs_wished |count >0 %} {{jobs_wished |count }} Jobs {% else
+            %} {{jobs_wished |count }} Job {% endif %}
           </small>
         </div>
         <div class="card-body">
           <div class="tasks" id="Wishlist">
-            {% for job in jobs%} {% if job.status == "Wishlist"%}
+            {% for job in jobs_wished%}
             <!-- Start task -->
             <div
               class="card mb-3 cursor-grab"
@@ -93,23 +95,10 @@ endblock %} {% block content %}
               <div class="card-body">
                 <h5>{{job.job_title}}</h5>
                 <p class="mb-0">{{job.company.company_name}}</p>
-                <div class="text-right">
-                  <small class="text-muted mb-1 d-inline-block">25%</small>
-                </div>
-                <div class="progress" style="height: 5px">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    style="width: 25%"
-                    aria-valuenow="25"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
               </div>
             </div>
             <!-- End task -->
-            {% endif %} {% endfor %}
+            {% endfor %}
           </div>
           <div class="btn btn-primary btn-block">Add task</div>
         </div>
@@ -123,12 +112,13 @@ endblock %} {% block content %}
         <div class="card-header bg-light">
           <h3 class="card-title h5 mb-1">Applied</h3>
           <small class="mb-0 text-muted">
-            Nam pretium turpis et arcu. Duis arcu.
+            {% if jobs_applied |count >0 %} {{jobs_applied |count }} Jobs {%
+            else %} {{jobs_applied |count }} Job {% endif %}
           </small>
         </div>
         <div class="card-body">
           <div class="tasks" id="Applied">
-            {% for job in jobs%} {% if job.status == "Applied"%}
+            {% for job in jobs_applied%}
             <!-- Start task -->
             <div
               class="card mb-3 cursor-grab"
@@ -139,23 +129,10 @@ endblock %} {% block content %}
               <div class="card-body">
                 <h5>{{job.job_title}}</h5>
                 <p class="mb-0">{{job.company.company_name}}</p>
-                <div class="text-right">
-                  <small class="text-muted mb-1 d-inline-block">25%</small>
-                </div>
-                <div class="progress" style="height: 5px">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    style="width: 25%"
-                    aria-valuenow="25"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
               </div>
             </div>
             <!-- End task -->
-            {% endif %} {% endfor %}
+            {% endfor %}
           </div>
           <div class="btn btn-primary btn-block">Add task</div>
         </div>
@@ -169,12 +146,13 @@ endblock %} {% block content %}
         <div class="card-header bg-light">
           <h3 class="card-title h5 mb-1">Interview</h3>
           <small class="mb-0 text-muted">
-            Curabitur ligula sapien, tincidunt non.
+            {% if jobs_interview |count >0 %} {{ jobs_interview |count }} Jobs
+            {% else %} {{ jobs_interview |count }} Job {% endif %}
           </small>
         </div>
         <div class="card-body">
           <div class="tasks" id="Interview">
-            {% for job in jobs%} {% if job.status == "Interview"%}
+            {% for job in jobs_interview%}
             <!-- Start task -->
             <div
               class="card mb-3 cursor-grab"
@@ -185,23 +163,10 @@ endblock %} {% block content %}
               <div class="card-body">
                 <h5>{{job.job_title}}</h5>
                 <p class="mb-0">{{job.company.company_name}}</p>
-                <div class="text-right">
-                  <small class="text-muted mb-1 d-inline-block">25%</small>
-                </div>
-                <div class="progress" style="height: 5px">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    style="width: 25%"
-                    aria-valuenow="25"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
               </div>
             </div>
             <!-- End task -->
-            {% endif %} {% endfor %}
+            {% endfor %}
           </div>
           <div class="btn btn-primary btn-block">Add task</div>
         </div>
@@ -215,12 +180,13 @@ endblock %} {% block content %}
         <div class="card-header bg-light">
           <h3 class="card-title h5 mb-1">Offer</h3>
           <small class="mb-0 text-muted">
-            Nam pretium turpis et arcu. Duis arcu.
+            {% if jobs_offer |count >0 %} {{ jobs_offer |count }} Jobs {% else
+            %} {{ jobs_offer |count }} Job {% endif %}
           </small>
         </div>
         <div class="card-body">
           <div class="tasks" id="Offer">
-            {% for job in jobs%} {% if job.status == "Offer"%}
+            {% for job in jobs_offer%}
             <!-- Start task -->
             <div
               class="card mb-3 cursor-grab"
@@ -231,23 +197,10 @@ endblock %} {% block content %}
               <div class="card-body">
                 <h5>{{job.job_title}}</h5>
                 <p class="mb-0">{{job.company.company_name}}</p>
-                <div class="text-right">
-                  <small class="text-muted mb-1 d-inline-block">25%</small>
-                </div>
-                <div class="progress" style="height: 5px">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    style="width: 25%"
-                    aria-valuenow="25"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
               </div>
             </div>
             <!-- End task -->
-            {% endif %} {% endfor %}
+            {% endfor %}
           </div>
           <div class="btn btn-primary btn-block">Add task</div>
         </div>
@@ -261,12 +214,13 @@ endblock %} {% block content %}
         <div class="card-header bg-light">
           <h3 class="card-title h5 mb-1">Rejected</h3>
           <small class="mb-0 text-muted">
-            Nam pretium turpis et arcu. Duis arcu.
+            {% if jobs_rejected |count >0 %} {{jobs_rejected |count }} Jobs {%
+            else %} {{jobs_rejected |count }} Job {% endif %}
           </small>
         </div>
         <div class="card-body">
           <div class="tasks" id="Rejected">
-            {% for job in jobs%} {% if job.status == "Rejected"%}
+            {% for job in jobs_rejected%}
             <!-- Start task -->
             <div
               class="card mb-3 cursor-grab"
@@ -277,23 +231,10 @@ endblock %} {% block content %}
               <div class="card-body">
                 <h5>{{job.job_title}}</h5>
                 <p class="mb-0">{{job.company.company_name}}</p>
-                <div class="text-right">
-                  <small class="text-muted mb-1 d-inline-block">25%</small>
-                </div>
-                <div class="progress" style="height: 5px">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    style="width: 25%"
-                    aria-valuenow="25"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
               </div>
             </div>
             <!-- End task -->
-            {% endif %} {% endfor %}
+            {% endfor %}
           </div>
           <div class="btn btn-primary btn-block">Add task</div>
         </div>
