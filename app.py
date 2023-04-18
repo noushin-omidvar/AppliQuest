@@ -372,7 +372,6 @@ def create_company():
                           company_url=request.json.get('company_url', None),
                           company_about=request.json.get('company_about', None))
 
-    print(new_company)
     db.session.add(new_company)
     db.session.commit()
     return jsonify(new_company=new_company.to_dict())
@@ -556,8 +555,19 @@ def show_board():
 
     new_job_form = AddJobForm()
     job_detail_form = JobDetailForm()
-    jobs = Job.query.all()
-    return render_template('users/board.html', user_id=g.user.id, jobs=jobs, new_job_form=new_job_form, job_detail_form=job_detail_form)
+    jobs_wished = Job.query.filter_by(status='Wishlist').all()
+    jobs_applied = Job.query.filter_by(status='Applied').all()
+    jobs_interview = Job.query.filter_by(status='Interview').all()
+    jobs_offer = Job.query.filter_by(status='Offer').all()
+    jobs_rejected = Job.query.filter_by(status='Rejected').all()
+    return render_template('users/board.html', user_id=g.user.id,
+                           jobs_wished=jobs_wished,
+                           jobs_applied=jobs_applied,
+                           jobs_interview=jobs_interview,
+                           jobs_offer=jobs_offer,
+                           jobs_rejected=jobs_rejected,
+                           new_job_form=new_job_form,
+                           job_detail_form=job_detail_form)
 
 
 # with app.app_context():
