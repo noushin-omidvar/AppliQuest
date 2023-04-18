@@ -1,51 +1,81 @@
 {% extends 'base_login.html' %} {% block title %}AppliQuest: Job board{%
 endblock %} {% block content %}
 
-<!-- Button trigger modal -->
-<button
-  type="button"
-  class="btn btn-primary"
-  data-bs-toggle="modal"
-  data-bs-target="#exampleModal"
->
-  + Create New Job
-</button>
-
-<!-- Modal -->
+<!-- New Job Modal -->
 <div
   class="modal fade"
-  id="exampleModal"
+  id="newJobModal"
   tabindex="-1"
-  aria-labelledby="exampleModalLabel"
+  aria-labelledby="newJobModalLabel"
   aria-hidden="true"
 >
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Job</h1>
+        <h1 class="modal-title fs-5" id="newJobModalLabel">Add Job</h1>
       </div>
       <div class="modal-body">
-        <form method="POST" id="user_form">
-          {{ form.hidden_tag() }} {% for field in form if
+        <form autocomplete="off" method="POST" id="new_job_form">
+          {{ new_job_form.hidden_tag() }} {% for field in new_job_form if
           field.widget.input_type != 'hidden' %} {% for error in field.errors %}
           <span class="text-danger">{{ error }}</span>
-          {% endfor %} {{ field(placeholder=field.label.text,
-          class="form-control") }} {% endfor %}
+          {% endfor %}
+          <div>
+            {{ field.label(class_="form-label fw-semibold") }} {% if
+            field.widget.input_type == 'select' %} {{
+            field(class_="form-select") }} {% elif field.label.text == "Company"
+            %}
 
-          <button class="btn btn-primary btn-lg btn-block">Login</button>
+            <div class="autocomplete">
+              <input
+                id="company_name"
+                type="text"
+                name="company_name"
+                placeholder="Company"
+                class="form-control"
+              />
+            </div>
+
+            {% else %} {{ field(class_="form-control",
+            placeholder=field.label.text) }} {% endif %}
+          </div>
+          <br />
+          {% endfor %}
         </form>
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Discard
         </button>
-        <button type="button" class="btn btn-primary">Save Job</button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          id="create_job"
+          data-bs-toggle="modal"
+          data-bs-target="#JobDetailModal"
+        >
+          Save Job
+        </button>
       </div>
     </div>
   </div>
 </div>
+<!-- Save Job Button trigger modal -->
+<div class="container d-flex">
+  <div class="p-2 ms-auto">
+    <button
+      type="button"
+      class="btn btn-primary ml-auto"
+      data-bs-toggle="modal"
+      data-bs-target="#newJobModal"
+    >
+      + Create New Job
+    </button>
+  </div>
+</div>
 
-<div class="container py-5">
+<div class="container py-5 flex">
   <div class="row">
     <!-- Start lane -->
     <div class="col-12 col-lg-4">
