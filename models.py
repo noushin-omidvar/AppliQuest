@@ -173,7 +173,7 @@ class Company(db.Model):
     company_about = db.Column(db.String,
                               nullable=True)
 
-    def to_dictt(self):
+    def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
@@ -210,7 +210,7 @@ class Contact(db.Model):
     user = db.relationship('User', backref='contacts')
     company = db.relationship('Company', backref="contacts")
 
-    def to_dictt(self):
+    def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
@@ -247,7 +247,7 @@ class Document(db.Model):
     user = db.relationship('User', backref='documents')
     job = db.relationship('Job', backref="documents")
 
-    def to_dictt(self):
+    def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
@@ -285,5 +285,5 @@ class Task(db.Model):
     user = db.relationship('User', backref='tasks')
     job = db.relationship('Job', backref="tasks")
 
-    def to_dictt(self):
+    def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
