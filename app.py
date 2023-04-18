@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 
 from models import db, connect_db, User, Job, Company, Document, Task, Contact
 
-from forms import SignUpForm, LoginForm, AddJobForm
+from forms import SignUpForm, LoginForm, AddJobForm, JobDetailForm
 
 CURR_USER_KEY = "curr_user"
 
@@ -409,6 +409,17 @@ def delete_company(user_id, company_id):
     # Return the updated document data
     return jsonify(message="Company deleted")
 
+
+@app.route('/api/companies/autocomplete_company', methods=['POST'])
+def autocomplete_company():
+    print(request.form)
+    query = request.json['query']
+    print(query)
+    companies = Company.query.filter(
+        Company.company_name.ilike('%' + query + '%')).all()
+    print([c.company_name for c in companies])
+    return jsonify([c.company_name for c in companies])
+
 # ------------------------
 # Set up view endpoints
 # ------------------------
@@ -524,9 +535,10 @@ def show_board():
     if not g.user:
         return render_template('index.html')
 
-    form = AddJobForm()
+    new_job_form = AddJobForm()
+    job_detail_form = JobDetailForm()
     jobs = Job.query.all()
-    return render_template('users/board.html', jobs=jobs, form=form)
+    return render_template('users/board.html', jobs=jobs, new_job_form=new_job_form, job_detail_form=job_detail_form)
 
 
 # with app.app_context():
