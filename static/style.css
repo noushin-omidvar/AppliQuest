@@ -1,5 +1,8 @@
 html, body {
+  color:#4a4a4a;
     background: #e9ecef;
+    font-family: Lato;
+    color: rgba(25, 4, 69, 0.8);
   }
   
   .cursor-grab {
@@ -44,3 +47,124 @@ html, body {
     background-color: DodgerBlue !important;
     color: #ffffff;
   }
+
+
+  .col {
+    height: 100vh;
+  }
+  body {
+    overflow-y: hidden;
+  }
+
+
+
+.navbar{
+  border: 1px, solid;
+  width:100%
+}
+
+.navbar-brand{
+  color:#4a4a4a;
+  font-weight: bolder;
+}
+
+.nav-link{
+  font-size: 0.9rem;
+  margin-right: 5px;
+  margin-left: 5px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+
+.nav-link:hover, .navbar-nav .active{
+  font-weight: bolder;
+  border: 1px solid transparent;
+  border-radius: 10px;;
+    box-shadow: inset 0 0 1px 1px rgba(25,4,69,0.3);
+    background-color: transparent;}
+
+.card-col, .col{
+  border: 0.5px solid ;
+  border-color: #d4d4d4;
+  border-radius: 0px;
+  background-color: whitesmoke;
+}
+
+card-header, card-body{
+  border: 0px solid transparent;
+}
+
+
+#Wishlist .job-card {
+  background-color: #efcf1c;
+}
+
+#Applied .job-card  {
+  background-color: #f37236;
+}
+
+#Interview .job-card  {
+  background-color: #16b3b9;
+}
+#Offer .job-card {
+  background-color: #62aa5a;
+}
+
+#Rejected .job-card {
+  background-color: #f45c64;
+}
+
+.btn-secondary{
+  background-color: whitesmoke;
+  color:#4a4a4a
+}
+
+
+.log-btn{
+background-color:rgb(106, 79, 235);
+border-color: rgb(106, 79, 235);
+color:whitesmoke
+}
+
+.btn-appliquest{
+  background-color:rgb(106, 79, 235);
+  border-color: rgb(106, 79, 235);
+  color:whitesmoke  
+}
+
+.btn-appliquest:hover{
+  color:rgb(106, 79, 235);
+  border-color: rgb(106, 79, 235);
+  background-color:whitesmoke ;
+  cursor: pointer;
+}
+
+.btn-task.on-view{
+  background-color:rgb(106, 79, 235);
+  border-color: rgb(106, 79, 235);
+  color:whitesmoke ;
+  text-align:left;
+  font-family: lato;
+  border-radius: 5px;
+  
+}
+
+.btn-task{
+  padding-left: 10%;
+
+}
+
+
+.btn-task:hover{
+  cursor: pointer;
+  border-color: rgb(106, 79, 235);
+}
+
+.border-end {
+  border-right: 1px solid black;
+}
+
+select[data-placeholder] option[value=""] {
+  color: #a0a0a0;
+}
