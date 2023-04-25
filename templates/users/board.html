@@ -9,7 +9,7 @@ endblock %} {% block content %}
   aria-labelledby="newJobModalLabel"
   aria-hidden="true"
 >
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="newJobModalLabel">Add Job</h1>
@@ -18,7 +18,7 @@ endblock %} {% block content %}
         <form autocomplete="off" method="POST" id="new_job_form">
           {{ new_job_form.hidden_tag() }} {% for field in new_job_form if
           field.widget.input_type != 'hidden' %} {% for error in field.errors %}
-          <span class="text-danger">{{ error }}</span>
+          <span class="text-secondary">{{ error }}</span>
           {% endfor %}
           <div>
             {{ field.label(class_="form-label fw-semibold") }} {% if
@@ -48,195 +48,253 @@ endblock %} {% block content %}
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Discard
         </button>
-        <button type="button" class="btn btn-primary" id="create-job">
+        <button type="button" class="btn btn-appliquest" id="create-job">
           Save Job
         </button>
       </div>
     </div>
   </div>
 </div>
-<!-- Save Job Button trigger modal -->
-<div class="container d-flex">
-  <div class="p-2 ms-auto">
-    <button
-      type="button"
-      class="btn btn-primary ml-auto"
-      data-bs-toggle="modal"
-      data-bs-target="#newJobModal"
-    >
-      + Create New Job
-    </button>
-  </div>
-</div>
 
-<div class="container py-5 flex">
-  <div class="row">
+<div class="container-fluid board">
+  <div
+    class="row flex-nowrap"
+    style="
+      top: 0px;
+      bottom: 0px;
+      display: flex;
+      background-color: rgb(253, 253, 255);
+      flex-direction: row;
+    "
+  >
     <!-- Start lane -->
-    <div class="col-12 col-lg-4">
-      <div class="card mb-3">
-        <div class="card-header bg-light">
-          <h3 class="card-title h5 mb-1">Wishlist</h3>
-
+    <div class="col col-sm-4 g-0">
+      <div class="card mb-3 card-col">
+        <div class="card-header bg-light text-center">
+          <h3 class="card-title p-1 h6 mb-1 wishlist">WISHLIST</h3>
           <small class="mb-0 text-muted">
-            {% if jobs_wished |count >0 %} {{jobs_wished |count }} Jobs {% else
-            %} {{jobs_wished |count }} Job {% endif %}
+            {% if jobs['jobs_wished'] |count >0 %} {{jobs['jobs_wished'] |count
+            }} Jobs {% else %} {{jobs['jobs_wished'] |count }} Job {% endif %}
           </small>
+          <div class="d-grid mt-3">
+            <button
+              type="button"
+              class="btn btn-appliquest btn-sm ml-auto"
+              data-bs-toggle="modal"
+              data-bs-target="#newJobModal"
+            >
+              + New Job
+            </button>
+          </div>
         </div>
-        <div class="card-body">
+        <div
+          class="card-body"
+          style="height: calc(100vh - 180px); overflow-y: auto"
+        >
           <div class="tasks" id="Wishlist">
-            {% for job in jobs_wished%}
+            {% for job in jobs['jobs_wished']%}
             <!-- Start task -->
             <div
-              class="card mb-3 cursor-grab"
+              class="card mb-3 cursor-grab job-card text-light"
               data-job_title="{{job.job_title}}"
               data-job_id="{{job.id}}"
               data-user_id="{{job.user_id}}"
             >
               <div class="card-body">
-                <h5>{{job.job_title}}</h5>
+                <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
               </div>
             </div>
             <!-- End task -->
             {% endfor %}
           </div>
-          <div class="btn btn-primary btn-block">Add task</div>
         </div>
       </div>
     </div>
     <!-- End lane -->
 
     <!-- Start lane -->
-    <div class="col-12 col-lg-4">
-      <div class="card mb-3">
-        <div class="card-header bg-light">
-          <h3 class="card-title h5 mb-1">Applied</h3>
+    <div class="col col-sm-4 g-0">
+      <div class="card mb-3 card-col">
+        <div class="card-header bg-light text-center">
+          <h3 class="card-title p-1 h6 mb-1 applied">APPLIED</h3>
           <small class="mb-0 text-muted">
-            {% if jobs_applied |count >0 %} {{jobs_applied |count }} Jobs {%
-            else %} {{jobs_applied |count }} Job {% endif %}
+            {% if jobs['jobs_applied'] |count >0 %} {{jobs['jobs_applied']
+            |count }} Jobs {% else %} {{jobs['jobs_applied'] |count }} Job {%
+            endif %}
           </small>
+          <div class="d-grid mt-3">
+            <button
+              type="button"
+              class="btn btn-appliquest btn-sm ml-auto"
+              data-bs-toggle="modal"
+              data-bs-target="#newJobModal"
+            >
+              + New Job
+            </button>
+          </div>
         </div>
-        <div class="card-body">
+        <div
+          class="card-body"
+          style="height: calc(100vh - 180px); overflow-y: auto"
+        >
           <div class="tasks" id="Applied">
-            {% for job in jobs_applied%}
+            {% for job in jobs['jobs_applied']%}
             <!-- Start task -->
             <div
-              class="card mb-3 cursor-grab"
+              class="card mb-3 cursor-grab job-card text-light"
               data-job_title="{{job.job_title}}"
               data-job_id="{{job.id}}"
               data-user_id="{{job.user_id}}"
             >
               <div class="card-body">
-                <h5>{{job.job_title}}</h5>
+                <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
               </div>
             </div>
             <!-- End task -->
             {% endfor %}
           </div>
-          <div class="btn btn-primary btn-block">Add task</div>
         </div>
       </div>
     </div>
     <!-- End lane -->
 
     <!-- Start lane -->
-    <div class="col-12 col-lg-4">
-      <div class="card mb-3">
-        <div class="card-header bg-light">
-          <h3 class="card-title h5 mb-1">Interview</h3>
+    <div class="col col-sm-4 g-0">
+      <div class="card mb-3 card-col">
+        <div class="card-header bg-light text-center">
+          <h3 class="card-title p-1 h6 mb-1 interview">INTERVIEW</h3>
           <small class="mb-0 text-muted">
-            {% if jobs_interview |count >0 %} {{ jobs_interview |count }} Jobs
-            {% else %} {{ jobs_interview |count }} Job {% endif %}
+            {% if jobs['jobs_interview'] |count >0 %} {{ jobs['jobs_interview']
+            |count }} Jobs {% else %} {{ jobs['jobs_interview'] |count }} Job {%
+            endif %}
           </small>
+          <div class="d-grid mt-3">
+            <button
+              type="button"
+              class="btn btn-appliquest btn-sm ml-auto"
+              data-bs-toggle="modal"
+              data-bs-target="#newJobModal"
+            >
+              + New Job
+            </button>
+          </div>
         </div>
-        <div class="card-body">
+        <div
+          class="card-body"
+          style="height: calc(100vh - 180px); overflow-y: auto"
+        >
           <div class="tasks" id="Interview">
-            {% for job in jobs_interview%}
+            {% for job in jobs['jobs_interview']%}
             <!-- Start task -->
             <div
-              class="card mb-3 cursor-grab"
+              class="card mb-3 cursor-grab job-card text-light"
               data-job_title="{{job.job_title}}"
               data-job_id="{{job.id}}"
               data-user_id="{{job.user_id}}"
             >
               <div class="card-body">
-                <h5>{{job.job_title}}</h5>
+                <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
               </div>
             </div>
             <!-- End task -->
             {% endfor %}
           </div>
-          <div class="btn btn-primary btn-block">Add task</div>
         </div>
       </div>
     </div>
     <!-- End lane -->
 
     <!-- Start lane -->
-    <div class="col-12 col-lg-4">
-      <div class="card mb-3">
-        <div class="card-header bg-light">
-          <h3 class="card-title h5 mb-1">Offer</h3>
+    <div class="col col-sm-4 g-0">
+      <div class="card mb-3 card-col">
+        <div class="card-header bg-light text-center">
+          <h3 class="card-title p-1 h6 mb-1 offer">OFFER</h3>
           <small class="mb-0 text-muted">
-            {% if jobs_offer |count >0 %} {{ jobs_offer |count }} Jobs {% else
-            %} {{ jobs_offer |count }} Job {% endif %}
+            {% if jobs['jobs_offer'] |count >0 %} {{ jobs['jobs_offer'] |count
+            }} Jobs {% else %} {{ jobs['jobs_offer'] |count }} Job {% endif %}
           </small>
+          <div class="d-grid mt-3">
+            <button
+              type="button"
+              class="btn btn-appliquest btn-sm ml-auto"
+              data-bs-toggle="modal"
+              data-bs-target="#newJobModal"
+            >
+              + New Job
+            </button>
+          </div>
         </div>
-        <div class="card-body">
+        <div
+          class="card-body"
+          style="height: calc(100vh - 180px); overflow-y: auto"
+        >
           <div class="tasks" id="Offer">
-            {% for job in jobs_offer%}
+            {% for job in jobs['jobs_offer']%}
             <!-- Start task -->
             <div
-              class="card mb-3 cursor-grab"
+              class="card mb-3 cursor-grab job-card text-light"
               data-job_title="{{job.job_title}}"
               data-job_id="{{job.id}}"
               data-user_id="{{job.user_id}}"
             >
               <div class="card-body">
-                <h5>{{job.job_title}}</h5>
+                <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
               </div>
             </div>
             <!-- End task -->
             {% endfor %}
           </div>
-          <div class="btn btn-primary btn-block">Add task</div>
         </div>
       </div>
     </div>
     <!-- End lane -->
 
     <!-- Start lane -->
-    <div class="col-12 col-lg-4">
-      <div class="card mb-3">
-        <div class="card-header bg-light">
-          <h3 class="card-title h5 mb-1">Rejected</h3>
+    <div class="col col-sm-4 g-0">
+      <div class="card mb-3 card-col">
+        <div class="card-header bg-light text-center">
+          <h3 class="card-title h6 mb-1 p-2 rejected">REJECTED</h3>
           <small class="mb-0 text-muted">
-            {% if jobs_rejected |count >0 %} {{jobs_rejected |count }} Jobs {%
-            else %} {{jobs_rejected |count }} Job {% endif %}
+            {% if jobs['jobs_rejected'] |count >0 %} {{jobs['jobs_rejected']
+            |count }} Jobs {% else %} {{jobs['jobs_rejected'] |count }} Job {%
+            endif %}
           </small>
+          <div class="d-grid mt-3">
+            <button
+              type="button"
+              class="btn btn-appliquest btn-sm ml-auto"
+              data-bs-toggle="modal"
+              data-bs-target="#newJobModal"
+            >
+              + New Job
+            </button>
+          </div>
         </div>
-        <div class="card-body">
+        <div
+          class="card-body"
+          style="height: calc(100vh - 180px); overflow-y: auto"
+        >
           <div class="tasks" id="Rejected">
-            {% for job in jobs_rejected%}
+            {% for job in jobs['jobs_rejected']%}
             <!-- Start task -->
             <div
-              class="card mb-3 cursor-grab"
+              class="card mb-3 cursor-grab job-card text-light"
               data-job_title="{{job.job_title}}"
               data-job_id="{{job.id}}"
               data-user_id="{{job.user_id}}"
             >
               <div class="card-body">
-                <h5>{{job.job_title}}</h5>
+                <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
               </div>
             </div>
             <!-- End task -->
             {% endfor %}
           </div>
-          <div class="btn btn-primary btn-block">Add task</div>
         </div>
       </div>
     </div>
