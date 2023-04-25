@@ -8,7 +8,6 @@ async function get_user_id() {
 
 async function main() {
   user_id = await get_user_id();
-  console.log(user_id);
 
   /** Implementing the drag and drop of Kanban items */
   dragula([
@@ -164,11 +163,9 @@ async function main() {
       });
       company = resp.data["new_company"];
     } else {
-      console.log(company_dict);
       resp = await axios.get(`/api/companies/${company_dict[company_name]}`);
       company = resp.data["company"];
     }
-    console.log(company);
     await axios.post(`/api/users/${user_id}/jobs`, {
       job_title: job_title,
       company: company,
@@ -176,6 +173,58 @@ async function main() {
     });
     $("#new_job_form")[0].reset();
     $("#newJobModal").modal("hide");
+  });
+
+  // task view
+
+  // Keep track of the currently active button
+  let activeTaskButton = $("#all-tasks");
+
+  // Add a click event listener to each button
+  $(".btn-task").click(async function () {
+    // If there is an active button, remove the "active" class from it
+    if (activeTaskButton) {
+      activeTaskButton.removeClass("on-view");
+    }
+
+    // Add the "on-view" class to the clicked button
+    $(this).addClass("on-view");
+
+    // Set the clicked button as the on-view button
+    activeTaskButton = $(this);
+    $("#tasks-cat").text(`Tasks > ${$(this).text()}`);
+
+    task_cat = $(this).text();
+
+    const taskCatElement = document.getElementById("task-cat");
+    taskCatElement.textContent = `{% set task_cat = "${task_cat}" %}`;
+    location.reload();
+    // console.log(task_cat);
+    // resp = await axios.get(`/api/users/${user_id}/tasks/${task_cat}`);
+  });
+
+  // creat new task
+  $(document).on("click", "#create-task", async function (e) {
+    e.preventDefault();
+
+    let user_id = await get_user_id();
+    let task = $("#task").val();
+    let job_id = $("#job").val();
+
+    let startdate = $("#startdate").val();
+    let enddate = $("#enddate").val();
+    let notes = $("#notes").val();
+
+    await axios.post(`/api/users/${user_id}/tasks`, {
+      task: task,
+      job_id: job_id,
+      startdate: startdate,
+      enddate: enddate,
+      notes: notes,
+    });
+    location.reload();
+    $("#new_task_form")[0].reset();
+    $("#newTaskModal").modal("hide");
   });
 }
 
