@@ -2,7 +2,7 @@ import uuid
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from sqlalchemy.dialects.postgresql import UUID
-from datetime import datetime
+from datetime import date
 
 
 bcrypt = Bcrypt()
@@ -119,7 +119,7 @@ class Job(db.Model):
 
     application_date = db.Column(db.Date,
                                  nullable=True,
-                                 default=datetime.utcnow())
+                                 default=date.today())
 
     status = db.Column(db.String,
                        nullable=False
@@ -135,15 +135,15 @@ class Job(db.Model):
                                 nullable=True)
 
     created_at = db.Column(
-        db.DateTime,
+        db.Date,
         nullable=True,
-        default=datetime.utcnow(),
+        default=date.today(),
     )
 
     modified_at = db.Column(
-        db.DateTime,
+        db.Date,
         nullable=True,
-        default=datetime.utcnow(),
+        default=date.today(),
     )
 
     user = db.relationship('User', backref='jobs')
@@ -239,9 +239,9 @@ class Document(db.Model):
                          nullable=False)
 
     created_at = db.Column(
-        db.DateTime,
+        db.Date,
         nullable=True,
-        default=datetime.utcnow(),
+        default=date.today(),
     )
 
     user = db.relationship('User', backref='documents')
@@ -270,10 +270,14 @@ class Task(db.Model):
     task = db.Column(db.String,
                      nullable=False)
 
+    completed = db.Column(db.Boolean,
+                          nullable=True,
+                          default=False)
+
     created_at = db.Column(
-        db.DateTime,
+        db.Date,
         nullable=True,
-        default=datetime.utcnow(),
+        default=date.today(),
     )
 
     due_date = db.Column(db.Date,
