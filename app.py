@@ -2,12 +2,10 @@ import os
 
 from flask import Flask, render_template, session, g, redirect, flash, jsonify, request
 from flask_debugtoolbar import DebugToolbarExtension
-
 from sqlalchemy.exc import IntegrityError
-
 from models import db, connect_db, User, Job, Company, Document, Task, Contact
-
-from forms import SignUpForm, LoginForm, AddJobForm, JobDetailForm
+from forms import SignUpForm, LoginForm, AddJobForm, JobDetailForm, AddTaskForm
+from datetime import date
 
 CURR_USER_KEY = "curr_user"
 
@@ -116,7 +114,6 @@ def delete_user(user_id):
 @app.route('/api/users/<user_id>/jobs', methods=['POST'])
 def create_job(user_id):
     """Create a new job"""
-    print('request', request)
 
     new_job = Job(user_id=user_id,
                   company_id=request.json['company']['id'],
@@ -131,6 +128,14 @@ def create_job(user_id):
     db.session.add(new_job)
     db.session.commit()
     return jsonify(new_job=new_job.to_dict())
+
+
+@app.route('/api/users/<user_id>/jobs')
+def get_jobs(user_id):
+    """get job by job_id"""
+
+    jobs = [job.job_title for job in Job.query.all()]
+    return jsonify(jobs=jobs.to_dict())
 
 
 @app.route('/api/users/<user_id>/jobs/<job_id>')
@@ -302,19 +307,56 @@ def delete_document(document_id):
 # --------------------
 
 @app.route('/api/users/<user_id>/tasks', methods=['POST'])
-def create_task():
+def create_task(user_id):
     """Create a new document"""
-
-    new_task = Task(user_id=request.json['user_id'],
+    print(request)
+    new_task = Task(user_id=user_id,
                     job_id=request.json['job_id'],
                     task=request.json['task'],
-                    created_at=request.json['created_at'],
-                    due_date=request.json['due_date'],
+                    created_at=request.json['startdate'],
+                    due_date=request.json['enddate'],
                     notes=request.json['notes'])
 
     db.session.add(new_task)
     db.session.commit()
     return jsonify(new_task=new_task.to_dict())
+
+
+@app.route('/api/users/<user_id>/tasks/<task_cat>')
+def get_tasks(user_id, task_cat):
+    """get tasks of user by category"""
+    if task_cat == 'All':
+        print(task_cat)
+        tasks = Task.query.filter(user_id == user_id).all()
+    elif task_cat == 'Due Today':
+        print(task_cat)
+        tasks = Task.query.filter(Task.due_date == date.today()).all()
+    elif task_cat == 'Past Due':
+        print(task_cat)
+        tasks = Task.query.filter(Task.due_date < date.today()).all()
+    elif task_cat == 'Completed':
+        print(task_cat)
+        tasks = Task.query.filter(Task.completed == True).all()
+
+    elif task_cat == 'Wishlists':
+        print(task_cat)
+        tasks = Task.query.filter(Task.job.status == 'Wishlist').all()
+    elif task_cat == 'Applications':
+        print(task_cat)
+        tasks = Task.query.filter(Task.job.status == 'Applied').all()
+    elif task_cat == 'Interviews':
+        print(task_cat)
+        tasks = Task.query.filter(Task.job.status == 'Interview').all()
+    elif task_cat == 'Offers':
+        print(task_cat)
+        tasks = Task.query.filter(Task.job.status == 'Offer').all()
+    elif task_cat == 'Rejections':
+        print(task_cat)
+        tasks = Task.query.filter(Task.job.status == 'Rejected').all()
+
+    tasks = [task.to_dict() for task in tasks]
+    print(tasks)
+    return jsonify(tasks=tasks)
 
 
 @app.route('/api/users/<user_id>/tasks/<task_id>')
@@ -378,7 +420,7 @@ def create_company():
 
 
 @app.route('/api/companies/<company_id>')
-def get_company(user_id, company_id):
+def get_company(company_id):
     """get company by company_id"""
 
     company = Company.query.get_or_404(company_id)
@@ -421,12 +463,9 @@ def delete_company(user_id, company_id):
 
 @app.route('/api/companies/autocomplete_company', methods=['POST'])
 def autocomplete_company():
-    print(request.form)
     query = request.json['query']
-    print(query)
     companies = Company.query.filter(
         Company.company_name.ilike('%' + query + '%')).all()
-    print([c.company_name for c in companies])
     return jsonify([c.company_name for c in companies])
 
 
@@ -555,21 +594,41 @@ def show_board():
 
     new_job_form = AddJobForm()
     job_detail_form = JobDetailForm()
-    jobs_wished = Job.query.filter_by(status='Wishlist').all()
-    jobs_applied = Job.query.filter_by(status='Applied').all()
-    jobs_interview = Job.query.filter_by(status='Interview').all()
-    jobs_offer = Job.query.filter_by(status='Offer').all()
-    jobs_rejected = Job.query.filter_by(status='Rejected').all()
+
+    jobs = {'jobs_wished': Job.query.filter_by(status='Wishlist').all(),
+            'jobs_applied': Job.query.filter_by(status='Applied').all(),
+            'jobs_interview': Job.query.filter_by(status='Interview').all(),
+            'jobs_offer': Job.query.filter_by(status='Offer').all(),
+            'jobs_rejected': Job.query.filter_by(status='Rejected').all(), }
+
     return render_template('users/board.html', user_id=g.user.id,
-                           jobs_wished=jobs_wished,
-                           jobs_applied=jobs_applied,
-                           jobs_interview=jobs_interview,
-                           jobs_offer=jobs_offer,
-                           jobs_rejected=jobs_rejected,
+                           jobs=jobs,
                            new_job_form=new_job_form,
                            job_detail_form=job_detail_form)
 
 
-# with app.app_context():
-#     u = User.query.first()
-#     print(u.as_dict())
+@app.route('/tasks')
+def show_tasks():
+    """Job tracking board"""
+
+    if not g.user:
+        return render_template('index.html')
+
+    new_task_form = AddTaskForm()
+    # task_detail_form = TaskDetailForm()
+
+    tasks = {'All': Task.query.filter(user_id == user_id).all(),
+             'Due Today': Task.query.filter(Task.due_date == date.today()).all(),
+             'Past Due': Task.query.filter(Task.due_date < date.today()).all(),
+             'Completed': Task.query.filter(Task.completed == True).all(),
+
+             'Wishlists': Task.query.join(Job).filter(Job.status == 'Wishlist').all(),
+             'Applications': Task.query.join(Job).filter(Job.status == 'Applied').all(),
+             'Interviews': Task.query.join(Job).filter(Job.status == 'Interview').all(),
+             'Offers': Task.query.join(Job).filter(Job.status == 'Offer').all(),
+             'Rejections': Task.query.join(Job).filter(Job.status == 'Rejected').all(),
+             }
+    return render_template('users/tasks.html', user_id=g.user.id,
+                           tasks=tasks,
+                           new_task_form=new_task_form,)
+    #    task_detail_form=task_detail_form)
