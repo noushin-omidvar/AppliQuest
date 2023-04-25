@@ -1,0 +1,231 @@
+{% extends 'base_login.html' %} {% block title %}AppliQuest: Task board{%
+endblock %} {% block content %}
+
+<div class="container mt-60">
+  <!-- New Task Modal -->
+  <div
+    class="modal fade"
+    id="newTaskModal"
+    tabindex="-1"
+    aria-labelledby="newTaskModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog w-75">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="newTaskModalLabel">Add Task</h1>
+        </div>
+        <div class="modal-body">
+          <form method="POST" id="new_task_form">
+            {{ new_task_form.hidden_tag() }} {% for field in new_task_form if
+            field.widget.input_type != 'hidden' %} {% for error in field.errors
+            %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+            <div>
+              {% if field.label.text == "Mark as Completed" %}
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="CheckCompleted"
+                />
+                <label class="form-check-label" for="CheckCompleted"
+                  >Mark as Completed</label
+                >
+              </div>
+              {% else %} {{ field.label(class_="form-label fw-semibold") }} {{
+              field(class_="form-control") }} {% endif %}
+            </div>
+            <br />
+            {% endfor %}
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Discard
+          </button>
+          <button type="button" class="btn btn-appliquest" id="create-task">
+            Save Task
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2">
+      <div class="task-menu">
+        <div>
+          <p class="btn-task col-12 on-view" id="all-tasks">All</p>
+          <p class="btn-task col-12" id="due-today">Due Today</p>
+          <p class="btn-task col-12" id="past-due">Past Due</p>
+          <p class="btn-task col-12" id="completed">Completed</p>
+        </div>
+        <div>
+          <div
+            style="
+              margin: 20px 10px;
+              border-top: 1px solid rgba(25, 4, 69, 0.1);
+            "
+          ></div>
+          <p class="btn-task col-12" id="Wishlists">Wishlists</p>
+          <p class="btn-task col-12" id="Applications">Applications</p>
+          <p class="btn-task col-12" id="Interviews">Interviews</p>
+          <p class="btn-task col-12" id="Offers">Offers</p>
+          <p class="btn-task col-12" id="Rejections">Rejections</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-10">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-8 col-xl-6">
+          <div
+            class="d-flex justify-content-between align-items-center mb-3 mt-3"
+          >
+            <h2 id="tasks-cat" class="m-0">Tasks &gt; All</h2>
+            <button
+              class="btn btn-appliquest btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#newTaskModal"
+            >
+              + New Task
+            </button>
+          </div>
+
+          <ul class="list-group rounded-0">
+            {% for task in tasks['All'] %}
+            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+              <input
+                class="form-check-input me-3"
+                type="checkbox"
+                value=""
+                checked
+              />
+              <s>{{task.task}}</s>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <ul class="list-group rounded-0">
+            {% for task in tasks['Due Today'] %}
+            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+              <input
+                class="form-check-input me-3"
+                type="checkbox"
+                value=""
+                checked
+              />
+              <s>{{task.task}}</s>
+            </li>
+            {% endfor %}
+          </ul>
+          <ul class="list-group rounded-0">
+            {% for task in tasks['Past Due'] %}
+            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+              <input
+                class="form-check-input me-3"
+                type="checkbox"
+                value=""
+                checked
+              />
+              <s>{{task.task}}</s>
+            </li>
+            {% endfor %}
+          </ul>
+          <ul class="list-group rounded-0">
+            {% for task in tasks['Completed'] %}
+            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+              <input
+                class="form-check-input me-3"
+                type="checkbox"
+                value=""
+                checked
+              />
+              <s>{{task.task}}</s>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <ul class="list-group rounded-0">
+            {% for task in tasks['Wishlists'] %}
+            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+              <input
+                class="form-check-input me-3"
+                type="checkbox"
+                value=""
+                checked
+              />
+              <s>{{task.task}}</s>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <ul class="list-group rounded-0">
+            {% for task in tasks['Applications'] %}
+            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+              <input
+                class="form-check-input me-3"
+                type="checkbox"
+                value=""
+                checked
+              />
+              <s>{{task.task}}</s>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <ul class="list-group rounded-0">
+            {% for task in tasks['Interviews'] %}
+            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+              <input
+                class="form-check-input me-3"
+                type="checkbox"
+                value=""
+                checked
+              />
+              <s>{{task.task}}</s>
+            </li>
+            {% endfor %}
+          </ul>
+          <ul class="list-group rounded-0">
+            {% for task in tasks['Offers'] %}
+            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+              <input
+                class="form-check-input me-3"
+                type="checkbox"
+                value=""
+                checked
+              />
+              <s>{{task.task}}</s>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <ul class="list-group rounded-0">
+            {% for task in tasks['Rejections'] %}
+            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+              <input
+                class="form-check-input me-3"
+                type="checkbox"
+                value=""
+                checked
+              />
+              <s>{{task.task}}</s>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
