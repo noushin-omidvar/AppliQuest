@@ -1,4 +1,4 @@
-from models import db, User, Job, Company, Contact, Document
+from models import db, User, Job, Company, Contact, Document, Task
 from app import app
 import random
 from faker import Faker
@@ -101,5 +101,19 @@ with app.app_context():
                             title=title, category=category, file_url=file_url)
         db.session.add(document)
         documents.append(document)
+
+    db.session.commit()
+
+    # Generate five fake tasks and associate them with users and jobs
+    for i in range(5):
+        user = random.choice(users)
+        job = random.choice(jobs)
+        task = fake.text(max_nb_chars=50)
+        completed = random.choice([True, False])
+        notes = fake.text()
+        task = Task(user_id=user.id, job_id=job.id,
+                    task=task, completed=completed, notes=notes)
+        db.session.add(task)
+        documents.append(task)
 
     db.session.commit()
