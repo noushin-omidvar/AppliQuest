@@ -371,12 +371,12 @@ def get_task(user_id, task_id):
 def update_task(user_id, task_id):
     # Retrieve the task from the database
     task = Task.query.get(task_id)
-
+    print(request.json)
     if task is None:
         # Return a 404 error if the task is not found
         return jsonify({'error': 'Task not found'}), 404
 
-    db.session.query(Task).filter(id=task_id).update(request.json)
+    db.session.query(Task).filter(Task.id == task_id).update(request.json)
     db.session.commit()
 
     # Return the updated task data
@@ -618,8 +618,8 @@ def show_tasks():
     # task_detail_form = TaskDetailForm()
 
     tasks = {'All': Task.query.filter(user_id == user_id).all(),
-             'Due Today': Task.query.filter(Task.due_date == date.today()).all(),
-             'Past Due': Task.query.filter(Task.due_date < date.today()).all(),
+             'Due-Today': Task.query.filter(Task.due_date == date.today()).all(),
+             'Past-Due': Task.query.filter(Task.due_date < date.today()).all(),
              'Completed': Task.query.filter(Task.completed == True).all(),
 
              'Wishlists': Task.query.join(Job).filter(Job.status == 'Wishlist').all(),
@@ -632,3 +632,12 @@ def show_tasks():
                            tasks=tasks,
                            new_task_form=new_task_form,)
     #    task_detail_form=task_detail_form)
+
+
+@app.route('/contacts')
+def show_contacts():
+    if not g.user:
+        return render_template('index.html')
+
+    new_contact_form = AddTaskForm()
+    return render_template('users/contacts.html', new_contact_form=new_contact_form)

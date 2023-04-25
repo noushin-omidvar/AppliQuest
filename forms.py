@@ -69,3 +69,30 @@ class AddTaskForm(FlaskForm):
     enddate = DateField('End Date', default=date.today)
     notes = TextAreaField("Notes")
     completed = BooleanField("Mark as Completed")
+
+
+class AddContactForm(FlaskForm):
+    """Add new contact form"""
+
+    def __init__(self, *args, **kwargs):
+        super(AddContactForm, self).__init__(*args, **kwargs)
+        self.job.choices = [(job.id, job.job_title) for job in Job.query.all()]
+
+    def validate(self):
+        if not super().validate():
+            return False
+
+        # Set the job_id field based on the selected job
+        job_id = self.job.data
+        if job_id:
+            self.job_id.data = job_id
+
+        return True
+
+    contact = StringField("Title", validators=[DataRequired()])
+    job = SelectField('Job', validators=[DataRequired()], render_kw={
+                      'placeholder': '+ Link to Job'})
+    startdate = DateField('Start Date', default=date.today)
+    enddate = DateField('End Date', default=date.today)
+    notes = TextAreaField("Notes")
+    completed = BooleanField("Mark as Completed")
