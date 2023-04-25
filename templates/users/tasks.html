@@ -62,13 +62,13 @@ endblock %} {% block content %}
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-2">
+    <div class="col-3 mt-3">
       <div class="task-menu">
         <div>
-          <p class="btn-task col-12 on-view" id="all-tasks">All</p>
-          <p class="btn-task col-12" id="due-today">Due Today</p>
-          <p class="btn-task col-12" id="past-due">Past Due</p>
-          <p class="btn-task col-12" id="completed">Completed</p>
+          <p class="btn-task col-12 on-view" id="All">All</p>
+          <p class="btn-task col-12" id="Due-Today">Due Today</p>
+          <p class="btn-task col-12" id="Past-Due">Past Due</p>
+          <p class="btn-task col-12" id="Completed">Completed</p>
         </div>
         <div>
           <div
@@ -85,9 +85,11 @@ endblock %} {% block content %}
         </div>
       </div>
     </div>
-    <div class="col-10">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col col-lg-8 col-xl-6">
+    <div class="col-9">
+      <div
+        class="row d-flex justify-content-center align-items-center h-100 task-panel"
+      >
+        <div class="col task-panel">
           <div
             class="d-flex justify-content-between align-items-center mb-3 mt-3"
           >
@@ -101,125 +103,215 @@ endblock %} {% block content %}
             </button>
           </div>
 
-          <ul class="list-group rounded-0">
+          <ul class="list-group rounded-0" id="All-list">
             {% for task in tasks['All'] %}
-            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+            <li
+              class="list-group-item border-0 d-flex align-items-center ps-0"
+              data-task-id="{{task.id}}"
+            >
               <input
                 class="form-check-input me-3"
                 type="checkbox"
                 value=""
-                checked
+                {%
+                if
+                task.completed
+                %}checked{%
+                endif
+                %}
               />
+              {% if task.completed %}
               <s>{{task.task}}</s>
+              {% else %} {{task.task}} {% endif %}
             </li>
             {% endfor %}
           </ul>
 
-          <ul class="list-group rounded-0">
-            {% for task in tasks['Due Today'] %}
-            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+          <ul class="list-group d-none rounded-0" id="Due-Today-list">
+            {% for task in tasks['Due-Today'] %}
+            <li
+              class="list-group-item border-0 d-flex align-items-center ps-0"
+              data-task-id="{{task.id}}"
+            >
               <input
                 class="form-check-input me-3"
                 type="checkbox"
                 value=""
-                checked
+                {%
+                if
+                task.completed
+                %}checked{%
+                endif
+                %}
               />
+              {% if task.completed %}
               <s>{{task.task}}</s>
+              {% else %} {{task.task}} {% endif %}
             </li>
             {% endfor %}
           </ul>
-          <ul class="list-group rounded-0">
-            {% for task in tasks['Past Due'] %}
-            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+          <ul class="list-group d-none rounded-0" id="Past-Due-list">
+            {% for task in tasks['Past-Due'] %}
+            <li
+              class="list-group-item border-0 d-flex align-items-center ps-0"
+              data-task-id="{{task.id}}"
+            >
               <input
                 class="form-check-input me-3"
                 type="checkbox"
                 value=""
-                checked
+                {%
+                if
+                task.completed
+                %}checked{%
+                endif
+                %}
               />
+              {% if task.completed %}
               <s>{{task.task}}</s>
+              {% else %} {{task.task}} {% endif %}
             </li>
             {% endfor %}
           </ul>
-          <ul class="list-group rounded-0">
+          <ul class="list-group d-none rounded-0" id="Completed-list">
             {% for task in tasks['Completed'] %}
-            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+            <li
+              class="list-group-item border-0 d-flex align-items-center ps-0"
+              data-task-id="{{task.id}}"
+            >
               <input
                 class="form-check-input me-3"
                 type="checkbox"
                 value=""
-                checked
+                {%
+                if
+                task.completed
+                %}checked{%
+                endif
+                %}
               />
+              {% if task.completed %}
               <s>{{task.task}}</s>
+              {% else %} {{task.task}} {% endif %}
             </li>
             {% endfor %}
           </ul>
 
-          <ul class="list-group rounded-0">
+          <ul class="list-group d-none rounded-0" id="Wishlists-list">
             {% for task in tasks['Wishlists'] %}
-            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+            <li
+              class="list-group-item border-0 d-flex align-items-center ps-0"
+              data-task-id="{{task.id}}"
+            >
               <input
                 class="form-check-input me-3"
                 type="checkbox"
                 value=""
-                checked
+                {%
+                if
+                task.completed
+                %}checked{%
+                endif
+                %}
               />
+              {% if task.completed %}
               <s>{{task.task}}</s>
+              {% else %} {{task.task}} {% endif %}
             </li>
             {% endfor %}
           </ul>
 
-          <ul class="list-group rounded-0">
+          <ul class="list-group d-none rounded-0" id="Applications-list">
             {% for task in tasks['Applications'] %}
-            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+            <li
+              class="list-group-item border-0 d-flex align-items-center ps-0"
+              data-task-id="{{task.id}}"
+            >
               <input
                 class="form-check-input me-3"
                 type="checkbox"
                 value=""
-                checked
+                {%
+                if
+                task.completed
+                %}checked{%
+                endif
+                %}
               />
+              {% if task.completed %}
               <s>{{task.task}}</s>
+              {% else %} {{task.task}} {% endif %}
             </li>
             {% endfor %}
           </ul>
 
-          <ul class="list-group rounded-0">
+          <ul class="list-group d-none rounded-0" id="Interviews-list">
             {% for task in tasks['Interviews'] %}
-            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+            <li
+              class="list-group-item border-0 d-flex align-items-center ps-0"
+              data-task-id="{{task.id}}"
+            >
               <input
                 class="form-check-input me-3"
                 type="checkbox"
                 value=""
-                checked
+                {%
+                if
+                task.completed
+                %}checked{%
+                endif
+                %}
               />
+              {% if task.completed %}
               <s>{{task.task}}</s>
+              {% else %} {{task.task}} {% endif %}
             </li>
             {% endfor %}
           </ul>
-          <ul class="list-group rounded-0">
+          <ul class="list-group d-none rounded-0" id="Offers-list">
             {% for task in tasks['Offers'] %}
-            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+            <li
+              class="list-group-item border-0 d-flex align-items-center ps-0"
+              data-task-id="{{task.id}}"
+            >
               <input
                 class="form-check-input me-3"
                 type="checkbox"
                 value=""
-                checked
+                {%
+                if
+                task.completed
+                %}checked{%
+                endif
+                %}
               />
+              {% if task.completed %}
               <s>{{task.task}}</s>
+              {% else %} {{task.task}} {% endif %}
             </li>
             {% endfor %}
           </ul>
 
-          <ul class="list-group rounded-0">
+          <ul class="list-group d-none rounded-0" id="Rejections-list">
             {% for task in tasks['Rejections'] %}
-            <li class="list-group-item border-0 d-flex align-items-center ps-0">
+            <li
+              class="list-group-item border-0 d-flex align-items-center ps-0"
+              data-task-id="{{task.id}}"
+            >
               <input
                 class="form-check-input me-3"
                 type="checkbox"
                 value=""
-                checked
+                {%
+                if
+                task.completed
+                %}checked{%
+                endif
+                %}
               />
+              {% if task.completed %}
               <s>{{task.task}}</s>
+              {% else %} {{task.task}} {% endif %}
             </li>
             {% endfor %}
           </ul>

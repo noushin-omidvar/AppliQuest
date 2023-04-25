@@ -178,13 +178,15 @@ async function main() {
   // task view
 
   // Keep track of the currently active button
-  let activeTaskButton = $("#all-tasks");
+  let activeTaskButton = $("#All");
+  let taskList = $("#All-list");
 
   // Add a click event listener to each button
   $(".btn-task").click(async function () {
     // If there is an active button, remove the "active" class from it
     if (activeTaskButton) {
       activeTaskButton.removeClass("on-view");
+      taskList.addClass("d-none");
     }
 
     // Add the "on-view" class to the clicked button
@@ -194,13 +196,34 @@ async function main() {
     activeTaskButton = $(this);
     $("#tasks-cat").text(`Tasks > ${$(this).text()}`);
 
-    task_cat = $(this).text();
-
-    const taskCatElement = document.getElementById("task-cat");
-    taskCatElement.textContent = `{% set task_cat = "${task_cat}" %}`;
-    location.reload();
-    // console.log(task_cat);
+    task_cat = $(this).attr("id");
+    console.log($(`#${task_cat}-list`));
+    taskList = $(`#${task_cat}-list`);
+    $(`#${task_cat}-list`).removeClass("d-none");
+    // location.reload();
+    console.log(`#${task_cat}-list`);
     // resp = await axios.get(`/api/users/${user_id}/tasks/${task_cat}`);
+  });
+
+  // Add a click event listener to each checkbox in the task list
+  $(".form-check-input").click(async function () {
+    console.log($(this));
+    const taskId = $(this).closest("li").data("task-id");
+    console.log(taskId);
+    // Update the status of the task in the database
+    await axios.patch(`/api/users/${user_id}/tasks/${taskId}`, {
+      completed: this.checked,
+    });
+
+    // Apply a strikethrough style to the task if it's checked
+    const task = $(`li[data-task-id=${taskId}]`);
+    console.log(task);
+    if (this.checked) {
+      console.log(task.find("s"));
+      task.css("text-decoration", "line-through");
+    } else {
+      task.css("text-decoration", "none");
+    }
   });
 
   // creat new task
