@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, TextAreaField, BooleanField, DateField
-from wtforms.validators import DataRequired, Email, Length, URL
+from wtforms import StringField, PasswordField, SelectField, TextAreaField, BooleanField, DateField, FileField, ValidationError
+from wtforms.validators import DataRequired, Email, Length, URL, Regexp
 from datetime import date
-from models import Job
+from models import Job, Company
 
 
 class SignUpForm(FlaskForm):
@@ -26,10 +26,16 @@ class LoginForm(FlaskForm):
 class AddJobForm(FlaskForm):
     """Add new Job Form"""
 
+    def valid_selection(form, field):
+        print("Enter")
+        if field.data == "Select":
+            raise ValidationError('Select from the list')
+
     job_title = StringField("Job Title", validators=[DataRequired()])
     company_name = StringField("Company", validators=[DataRequired()])
-    status = SelectField("Status", choices=[
-                         'Wishlist', 'Applied', "Interview", "Offer", "Rejected"])
+    status = SelectField("Status", validators=[valid_selection],
+                         choices=["Select",
+                         'Wishlist', 'Applied', "Interview", "Offer", "Rejected"], default="default")
 
 
 class JobDetailForm(FlaskForm):
@@ -76,23 +82,38 @@ class AddContactForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(AddContactForm, self).__init__(*args, **kwargs)
-        self.job.choices = [(job.id, job.job_title) for job in Job.query.all()]
+        self.company.choices = [(company.id, company.company_name)
+                                for company in Company.query.all()]
 
     def validate(self):
         if not super().validate():
             return False
 
         # Set the job_id field based on the selected job
-        job_id = self.job.data
-        if job_id:
-            self.job_id.data = job_id
+        company_id = self.job.data
+        if company_id:
+            self.company_id.data = company_id
 
         return True
 
-    contact = StringField("Title", validators=[DataRequired()])
-    job = SelectField('Job', validators=[DataRequired()], render_kw={
-                      'placeholder': '+ Link to Job'})
-    startdate = DateField('Start Date', default=date.today)
-    enddate = DateField('End Date', default=date.today)
+    first_name = StringField("First Name", validators=[DataRequired()])
+    last_name = StringField("Last Name", validators=[DataRequired()])
+    company = SelectField('Company', validators=[DataRequired()], render_kw={
+        'placeholder': '+ Select Company'})
+    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    phone = StringField('Phone', validators=[
+        DataRequired(),
+        Regexp(regex=r'^\+?[1-9]\d{1,14}$', message='Invalid phone number')])
     notes = TextAreaField("Notes")
     completed = BooleanField("Mark as Completed")
+
+
+class AddDocumentForm(FlaskForm):
+    def __init__(self, *args, **kwargs):
+        super(AddDocumentForm, self).__init__(*args, **kwargs)
+        self.category.choices = ['Cover Letter',
+                                 'Resume', 'Transcript', 'Certificate']
+
+    document = FileField('Document', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired()])
+    category = SelectField('Category')
