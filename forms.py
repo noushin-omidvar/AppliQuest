@@ -1,5 +1,6 @@
+from wtforms import StringField, SelectField, ValidationError
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, TextAreaField, BooleanField, DateField, FileField, ValidationError
+from wtforms import StringField, PasswordField, SelectField, TextAreaField, BooleanField, DateField, FileField, ValidationError, SubmitField
 from wtforms.validators import DataRequired, Email, Length, URL, Regexp
 from datetime import date
 from models import Job, Company
@@ -27,15 +28,21 @@ class AddJobForm(FlaskForm):
     """Add new Job Form"""
 
     def valid_selection(form, field):
-        print("Enter")
-        if field.data == "Select":
-            raise ValidationError('Select from the list')
+        if field.data == '':
+            raise ValidationError('Please select a valid option.')
 
-    job_title = StringField("Job Title", validators=[DataRequired()])
-    company_name = StringField("Company", validators=[DataRequired()])
-    status = SelectField("Status", validators=[valid_selection],
-                         choices=["Select",
-                         'Wishlist', 'Applied', "Interview", "Offer", "Rejected"], default="default")
+    job_title = StringField('Job Title', validators=[DataRequired()])
+    company_name = StringField('Company', validators=[DataRequired()])
+    status = SelectField('Status',
+                         validators=[DataRequired(
+                             message="Please select a status"), valid_selection],
+                         choices=[('', ''),
+                                  ('Wishlist', 'Wishlist'),
+                                  ('Applied', 'Applied'),
+                                  ('Interview', 'Interview'),
+                                  ('Offer', 'Offer'),
+                                  ('Rejected', 'Rejected')],
+                         default='')
 
 
 class JobDetailForm(FlaskForm):
@@ -46,8 +53,9 @@ class JobDetailForm(FlaskForm):
     status = SelectField("Status", choices=[
                          'Wishlist', 'Applied', "Interview", "Offer", "Rejected"])
     post_url = StringField("Post URL", validators=[URL()])
-    location = StringField("Location")
+    job_location = StringField("Location")
     notes = TextAreaField("Notes")
+    job_description = TextAreaField("Description")
 
 
 class AddTaskForm(FlaskForm):
@@ -105,7 +113,6 @@ class AddContactForm(FlaskForm):
         DataRequired(),
         Regexp(regex=r'^\+?[1-9]\d{1,14}$', message='Invalid phone number')])
     notes = TextAreaField("Notes")
-    completed = BooleanField("Mark as Completed")
 
 
 class AddDocumentForm(FlaskForm):
@@ -117,3 +124,4 @@ class AddDocumentForm(FlaskForm):
     document = FileField('Document', validators=[DataRequired()])
     title = StringField('Title', validators=[DataRequired()])
     category = SelectField('Category')
+    submit = SubmitField('Upload')
