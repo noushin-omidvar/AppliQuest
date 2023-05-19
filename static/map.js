@@ -33,12 +33,12 @@
     ? console.warn(p + " only loads once. Ignoring:", g)
     : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)));
 })({
-  key: "AIzaSyCjwKcGho_HjOMWI8dtcvejbMNyPWv4AnU",
+  key: "secret",
 });
 
 // Initialize and add the map
 let map;
-const apiKey = "AIzaSyCjwKcGho_HjOMWI8dtcvejbMNyPWv4AnU";
+const apiKey = "secret";
 async function initMap() {
   // The location of US
   const position = { lat: 39.8283, lng: -98.5795 };
