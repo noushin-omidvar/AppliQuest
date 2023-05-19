@@ -32,7 +32,8 @@ class User(db.Model):
                           nullable=False)
 
     email = db.Column(db.String,
-                      nullable=False)
+                      nullable=False,
+                      unique=True)
 
     password = db.Column(db.String,
                          nullable=False)
@@ -226,17 +227,13 @@ class Document(db.Model):
     user_id = db.Column(UUID(as_uuid=True),
                         db.ForeignKey('users.id'))
 
-    job_id = db.Column(UUID(as_uuid=True),
-                       db.ForeignKey('jobs.id'))
-
     title = db.Column(db.String,
                       nullable=False)
 
     category = db.Column(db.String,
                          nullable=False)
 
-    file_url = db.Column(db.String,
-                         nullable=False)
+    file = db.Column(db.LargeBinary, nullable=False)
 
     created_at = db.Column(
         db.Date,
@@ -245,7 +242,6 @@ class Document(db.Model):
     )
 
     user = db.relationship('User', backref='documents')
-    job = db.relationship('Job', backref="documents")
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
