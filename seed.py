@@ -2,10 +2,28 @@ from models import db, User, Job, Company, Contact, Document, Task
 from app import app
 import random
 from faker import Faker
+from faker_file.providers.pdf_file import PdfFileProvider
+
+import requests
+import random
+
+url = "https://api.openaq.org/v1/locations"
+
+params = {
+    "country": "US",
+    "limit": 10000
+}
+
+response = requests.get(url, params=params)
+
+# Get the JSON data from the response
+data = response.json()
+
 
 # Create a Faker object to generate fake data
 
 fake = Faker()
+fake.add_provider(PdfFileProvider)
 
 with app.app_context():
 
@@ -21,13 +39,14 @@ with app.app_context():
     documents = []
 
     # Generate five fake user profiles
-    for i in range(5):
+    for i in range(3):
         first_name = fake.first_name()
         last_name = fake.last_name()
         email = f"{first_name.lower()}.{last_name.lower()}@example.com"
         password = "password"
         linkedin_url = f"https://www.linkedin.com/in/{first_name}-{last_name}"
-        user_location = fake.city()
+
+        user_location = random.choice(data['results'])['city']
 
         # Create a new User object with the fake data and add it to the list
         user = User.signup(first_name, last_name, email,
@@ -37,10 +56,12 @@ with app.app_context():
     db.session.commit()
 
     # Generate five fake company profiles
-    for i in range(5):
+    for i in range(50):
 
         company_name = fake.company()
-        company_location = fake.city()
+
+        company_location = random.choice(data['results'])['city']
+
         company_url = fake.url()
         company_about = fake.text()
 
@@ -52,7 +73,7 @@ with app.app_context():
     db.session.commit()
 
     # Generate five fake job postings and associate them with users and companies
-    for i in range(5):
+    for i in range(50):
         user = random.choice(users)
         company = random.choice(companies)
         job_title = fake.job()
@@ -62,17 +83,20 @@ with app.app_context():
         status = random.choice(
             ['Wishlist', 'Applied', 'Interview', 'Offer', 'Rejected'])
         notes = fake.text()
-        job_location = fake.city()
+
+        job_location = random.choice(data['results'])['city']
+
         job_description = fake.text()
+        created_at = fake.date_between(start_date='-1y', end_date='today')
         # Create a new Job object with the fake data and add it to the list
         job = Job(user_id=user.id, company_id=company.id, job_title=job_title, post_url=post_url, application_date=application_date,
-                  status=status, notes=notes, job_location=job_location, job_description=job_description)
+                  status=status, notes=notes, job_location=job_location, job_description=job_description, created_at=created_at)
         db.session.add(job)
         jobs.append(job)
     db.session.commit()
 
     # Generate five fake contacts and associate them with users and companies
-    for i in range(5):
+    for i in range(50):
         user = random.choice(users)
         company = random.choice(companies)
         first_name = fake.first_name()
@@ -92,23 +116,37 @@ with app.app_context():
     for i in range(5):
         user = random.choice(users)
         job = random.choice(jobs)
-        title = fake.text(max_nb_chars=50)
+        title = fake.text(max_nb_chars=20)
         category = random.choice(
             ['Cover Letter', 'Resume', 'Transcript', 'Certificate'])
-        file_url = fake.file_path()
+        TEMPLATE = """
+            {{name}}
+            {{address}}
+            {{phone_number}}
 
-        document = Document(user_id=user.id, job_id=job.id,
-                            title=title, category=category, file_url=file_url)
+            {{text}} {{text}} {{text}}
+
+            {{text}} {{text}} {{text}}
+
+            {{text}} {{text}} {{text}}
+            
+            """
+
+        file = fake.pdf_file(
+            content=TEMPLATE, wrap_chars_after=80).encode('utf-8')
+
+        document = Document(user_id=user.id,
+                            title=title, category=category, file=file)
         db.session.add(document)
         documents.append(document)
 
     db.session.commit()
 
     # Generate five fake tasks and associate them with users and jobs
-    for i in range(5):
+    for i in range(50):
         user = random.choice(users)
         job = random.choice(jobs)
-        task = fake.text(max_nb_chars=50)
+        task = fake.text(max_nb_chars=200)
         completed = random.choice([True, False])
         notes = fake.text()
         task = Task(user_id=user.id, job_id=job.id,
