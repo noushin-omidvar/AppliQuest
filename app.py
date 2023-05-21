@@ -86,7 +86,7 @@ def signup():
             )
             db.session.commit()
             do_login(user)
-            return render_template('/')
+            return redirect('/')
 
         except IntegrityError:
             flash("An account already exists with this email", 'danger')
