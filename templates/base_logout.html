@@ -16,18 +16,26 @@
       href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap"
       rel="stylesheet"
     />
+    <script
+      src="https://kit.fontawesome.com/dc9be90fa8.js"
+      crossorigin="anonymous"
+    ></script>
     <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand bg-light">
-      <div class="container">
-        <a class="navbar-brand" href="/">AppliQuest</a>
+    <header class="navbar navbar-expand-lg bd-navbar sticky-top bg-light">
+      <nav class="container">
+        <div class="text-warning fw-bolder">
+          <a class="navbar-brand text-warning" href="/"
+            ><i class="fa-brands fa-algolia"></i>ppliQuest</a
+          >
+        </div>
         <div class="navbar-nav">
           <a class="nav-link" aria-current="page" href="/signup">Join Now</a>
           <a class="nav-link" href="/login">Log in</a>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
     {% block content %} {% endblock %}
   </body>
 </html>
