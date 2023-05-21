@@ -1,7 +1,7 @@
 from wtforms import StringField, SelectField, ValidationError
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectField, TextAreaField, BooleanField, DateField, FileField, ValidationError, SubmitField
-from wtforms.validators import DataRequired, Email, Length, URL, Regexp
+from wtforms.validators import DataRequired, Email, Length, URL, Regexp, EqualTo
 from datetime import date
 from models import Job, Company
 
@@ -9,11 +9,15 @@ from models import Job, Company
 class SignUpForm(FlaskForm):
     """Sign up form"""
 
-    first_name = StringField('First name', validators=[DataRequired()])
-    last_name = StringField('First name', validators=[DataRequired()])
-    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    first_name = StringField('First name', validators=[DataRequired()], render_kw={"placeholder": "First Name"})
+    last_name = StringField('Last name', validators=[DataRequired()], render_kw={"placeholder": "Last Name"})
+    email = StringField('E-mail', validators=[DataRequired(), Email()], render_kw={"placeholder": "E-mail"})
     password = PasswordField('Password', validators=[
-                             DataRequired(), Length(min=6)])
+                             DataRequired(), Length(min=6),
+                             EqualTo('password_confirm', message='Passwords must match')], render_kw={"placeholder": "Password"})
+    password_confirm = PasswordField('Confirm password ', validators=[
+                             DataRequired(), Length(min=6),
+                             EqualTo('password_confirm', message='Passwords must match')], render_kw={"placeholder": "Confirm Password"})
 
 
 class LoginForm(FlaskForm):
