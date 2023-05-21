@@ -28,9 +28,9 @@ class SignUpForm( NoRequiredForm):
 class LoginForm(FlaskForm):
     """Login form"""
 
-    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    email = StringField('E-mail', validators=[DataRequired(), Email()], render_kw={"placeholder": "E-mail"})
     password = PasswordField('Password', validators=[
-                             DataRequired(), Length(min=6)])
+                             DataRequired(), Length(min=6)], render_kw={"placeholder": "Password"})
 
 
 class AddJobForm(FlaskForm):
