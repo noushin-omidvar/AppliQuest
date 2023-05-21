@@ -1,23 +1,28 @@
 from wtforms import StringField, SelectField, ValidationError
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectField, TextAreaField, BooleanField, DateField, FileField, ValidationError, SubmitField
-from wtforms.validators import DataRequired, Email, Length, URL, Regexp, EqualTo
+from wtforms.validators import DataRequired, InputRequired, Email, Length, URL, Regexp, EqualTo
 from datetime import date
 from models import Job, Company
 
+class NoRequiredForm(FlaskForm):
+    class Meta:
+        def render_field(self, field, render_kw):
+            render_kw.setdefault('required', False)
+            return super().render_field(field, render_kw)
 
-class SignUpForm(FlaskForm):
+class SignUpForm( NoRequiredForm):
     """Sign up form"""
 
-    first_name = StringField('First name', validators=[DataRequired()], render_kw={"placeholder": "First Name"})
-    last_name = StringField('Last name', validators=[DataRequired()], render_kw={"placeholder": "Last Name"})
-    email = StringField('E-mail', validators=[DataRequired(), Email()], render_kw={"placeholder": "E-mail"})
+    first_name = StringField('First name', validators=[InputRequired(message='Required')], render_kw={"placeholder": "First Name"})
+    last_name = StringField('Last name', validators=[InputRequired(message='Required')], render_kw={"placeholder": "Last Name"})
+    email = StringField('E-mail', validators=[InputRequired(message='Required'), Email()], render_kw={"placeholder": "E-mail"})
     password = PasswordField('Password', validators=[
-                             DataRequired(), Length(min=6),
-                             EqualTo('password_confirm', message='Passwords must match')], render_kw={"placeholder": "Password"})
+                             InputRequired(message='Required'), Length(min=6),
+                             ], render_kw={"placeholder": "Password"})
     password_confirm = PasswordField('Confirm password ', validators=[
-                             DataRequired(), Length(min=6),
-                             EqualTo('password_confirm', message='Passwords must match')], render_kw={"placeholder": "Confirm Password"})
+                             InputRequired(message='Required'), Length(min=6, message="Must be at least 6 characters"),
+                             EqualTo('password', message='Passwords must match')], render_kw={"placeholder": "Confirm Password"})
 
 
 class LoginForm(FlaskForm):
