@@ -1,32 +1,103 @@
 {% extends 'base_logout.html' %} {% block title %} AppliQuest {% endblock %} {%
 block content %}
 <div class="container">
-  <div class="row">
-    <div class="col justify-content">
-      <h1>Organize your job search</h1>
+  <div class="row align-items-center">
+    <div class="col px-5 justify-content">
+      <h1>Streamline your job search</h1>
 
-      <p>
-        Track your job applications and keep your job search organized in one
-        place.
-      </p>
-      <a href="/signup" class="btn btn-primary">start your journey here</a>
+      <div>
+        Master the art of job search organization with ease! Effortlessly track
+        and manage your job applications in one convenient location, ensuring a
+        streamlined and efficient search process.
+      </div>
+      <br />
+      <div>
+        <a href="/signup" class="btn btn-warning btn-lg text-light"
+          >start your journey here</a
+        >
+      </div>
     </div>
     <div class="col">
-      <div style="width: 100%; position: relative">
-        <div
-          style="
-            position: absolute;
-            border-radius: 8px;
-            box-shadow: 0 0 0 1px rgba(25, 4, 69, 0.1),
-              0 10px 20px 0 rgba(25, 4, 69, 0.05);
-            background-image: url('images/advisor_heroes/advisor_hero_job_tracker.png');
-            background-size: 1199px auto;
-            height: 650px;
-            width: 100%;
-          "
-        ></div>
+      <img src="/static/images/Job hunt-amico.svg" alt="" />
+    </div>
+  </div>
+  <div class="row align-items-center bg-light w-100">
+    <div class="col">
+      <img src="/static/images/Portfolio-amico.svg" alt="" />
+    </div>
+    <div class="col justify-content">
+      <h1>Centralize all your job search details in one place</h1>
+
+      <div>
+        No more messy spreadsheets - track contacts, notes, dates, tasks,
+        documents, job descriptions, salaries, locations, and company data
+        effortlessly. It's like having a CRM for your job search.
+      </div>
+    </div>
+  </div>
+
+  <div class="row align-items-center">
+    <div class="col px-5 justify-content">
+      <h1>Kanban Board</h1>
+
+      <div>
+        Track the status of your job search with a Kanban board. Get a quick
+        snapshot of your applications, interviews, and offers all in one view.
+      </div>
+    </div>
+    <div class="col">
+      <img src="/static/images/Scrum board-rafiki.svg" alt="" />
+    </div>
+  </div>
+
+  <div class="row align-items-center bg-light">
+    <div class="col">
+      <img src="/static/images/Checklist-cuate.svg" alt="" />
+    </div>
+    <div class="col justify-content">
+      <h1>Task management</h1>
+
+      <div>
+        Efficiently handle your tasks and stay on top of everything required to
+        secure your dream job. Keep track of essential actions such as refining
+        your resume and thoroughly preparing for crucial interviews.
       </div>
     </div>
   </div>
 </div>
+
+<footer
+  class="bd-footer py-2 py-md-3 mt-5 bg-body-tertiary bg-light text-center"
+>
+  <div class="container py-2 py-md-3 px-4 px-md-3 text-body-secondary">
+    <div class="row align-items-center">
+      <div class="col">
+        <a
+          class="d-inline-flex align-items-center mb-2 text-body-emphasis text-decoration-none"
+          href="/"
+          aria-label="AppliQuest"
+        >
+          <h4 class="text-secondary">
+            <i class="fa-brands fa-algolia"></i>ppliQuest
+          </h4>
+        </a>
+        <ul class="list-unstyled small">
+          <li class="mb-2">
+            Designed and built by
+            <a href="https://github.com/noushin-omidvar">Noushin Omidvar</a>
+            with the help of <a href="https://github.com/renishb10">Renish</a>.
+          </li>
+
+          <li class="mb-2">
+            <a href="https://storyset.com/work"
+              >Work illustrations by Storyset</a
+            >
+          </li>
+          <li class="mb-2">Currently v1.0.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
 {% endblock %}
