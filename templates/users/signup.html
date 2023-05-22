@@ -13,7 +13,13 @@ content %}
                   Join AppliQuest Today!
                 </p>
 
-                <form action="" method="post" class="mx-1 mx-md-4" novalidate>
+                <form
+                  id="signup-form"
+                  action=""
+                  method="post"
+                  class="mx-1 mx-md-4"
+                  novalidate
+                >
                   {{ form.hidden_tag() }} {% for error in form.first_name.errors
                   %}
                   <small class="text-danger p-5">{{ error }}</small>
