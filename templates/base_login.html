@@ -49,7 +49,11 @@
   <body>
     <nav class="navbar navbar-expand-md w-100">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/"><h3>AppliQuest</h3></a>
+        <div class="text-warning fw-bolder">
+          <a class="navbar-brand text-warning" href="/"
+            ><i class="fa-brands fa-algolia"></i>ppliQuest</a
+          >
+        </div>
         <button
           class="navbar-toggler text-white"
           type="button"
@@ -95,13 +99,20 @@
             </li>
           </ul>
         </div>
+
         <div class="navbar-nav">
-          <a class="btn btn-info nav-link log-btn" href="/logout">Log out</a>
+          <a class="nav-link" href="/logout">Log out</a>
         </div>
       </div>
     </nav>
+    <ul class="flashes">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
     {% block content %} {% endblock %}
 
+    <script src="static/login.js"></script>
     <script src="static/board.js"></script>
   </body>
 </html>
