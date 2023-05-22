@@ -11,7 +11,7 @@ from api import api_bp
 from analytics import *
 
 
-CURR_USER_KEY = "curr_user"
+CURR_USER_KEY = "curr_user_id"
 
 app = Flask(__name__)
 app.register_blueprint(api_bp, url_prefix='/api/v1')
@@ -102,13 +102,14 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
+        print("validate")
         user = User.authenticate(form.email.data,
                                  form.password.data)
 
         if user:
             do_login(user)
             flash(f"Hello, {user.first_name}!", "success")
-            return redirect("/")
+            return jsonify({'user_id': user.id})
 
         flash("Invalid credentials.", 'danger')
 
@@ -146,16 +147,17 @@ def show_board():
     new_job_form = AddJobForm()
     job_detail_form = JobDetailForm()
 
-    jobs = {'jobs_wished': Job.query.filter_by(status='Wishlist').all(),
-            'jobs_applied': Job.query.filter_by(status='Applied').all(),
-            'jobs_interview': Job.query.filter_by(status='Interview').all(),
-            'jobs_offer': Job.query.filter_by(status='Offer').all(),
-            'jobs_rejected': Job.query.filter_by(status='Rejected').all(), }
+    jobs = {'jobs_wished': Job.get_jobs_by_status(g.user.id, "Wishlist"),
+            'jobs_applied': Job.get_jobs_by_status(g.user.id, "Applied"),
+            'jobs_interview': Job.get_jobs_by_status(g.user.id, "Interview"),
+            'jobs_offer': Job.get_jobs_by_status(g.user.id, "Offer"),
+            'jobs_rejected': Job.get_jobs_by_status(g.user.id, "Rejected"), }
 
     return render_template('users/board.html', user_id=g.user.id,
                            jobs=jobs,
                            new_job_form=new_job_form,
-                           job_detail_form=job_detail_form)
+                           job_detail_form=job_detail_form, 
+                           datetime = datetime)
 
 
 @app.route('/tasks')
