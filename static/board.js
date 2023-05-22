@@ -1,14 +1,10 @@
-let user_id;
 /** Get user_id from the serverside */
-async function get_user_id() {
-  const response = await axios.get("/api/user_id");
-  user_id = response.data["user_id"];
-  return user_id;
+function get_user_id() {
+  userId = localStorage.getItem("user_id");
+  return userId;
 }
 
 async function main() {
-  user_id = await get_user_id();
-
   /** Implementing the drag and drop of Kanban items */
   dragula([
     document.querySelector("#Wishlist"),
@@ -17,12 +13,20 @@ async function main() {
     document.querySelector("#Offer"),
     document.querySelector("#Rejected"),
   ]).on("drop", async function (el, target, source, sibling) {
-    // user_id = el.dataset.user_id;
+    user_id = localStorage.getItem("user_id");
     job_id = el.dataset.job_id;
+    today = new Date();
 
-    await axios.patch(`/api/users/${user_id}/jobs/${job_id}`, {
+    resp = await axios.get(`/api/v1/users/${user_id}/jobs/${job_id}`);
+
+    const formattedDate = today
+      .toUTCString()
+      .replace(/\d{2}:\d{2}:\d{2}/, "00:00:00");
+    await axios.patch(`/api/v1/users/${user_id}/jobs/${job_id}`, {
       status: target.id,
+      modified_at: formattedDate,
     });
+    location.reload();
   });
 
   function autocomplete(inp, arr) {
@@ -134,7 +138,7 @@ async function main() {
       let query = $(this).val();
 
       if (query.length >= 2) {
-        resp = await axios.post("/api/companies/autocomplete_company", {
+        resp = await axios.post("/api/v1/companies/autocomplete_company", {
           query: query,
         });
         autocomplete(document.getElementById("company_name"), resp.data);
@@ -142,11 +146,10 @@ async function main() {
     });
   });
 
-  $(document).on("click", "#create-job", async function (e, user_id) {
+  $(document).on("click", "#create-job", async function (e) {
     e.preventDefault();
-    user_id = await get_user_id();
-
-    const resp = await axios.get("/api/companies");
+    user_id = localStorage.getItem("user_id");
+    const resp = await axios.get("/api/v1/companies");
     let companies = resp.data["companies"];
     let company_dict = {};
     for (let i = 0; i < companies.length; i++) {
@@ -158,15 +161,15 @@ async function main() {
     let status = $("#status").val();
 
     if (!(company_name in Object.keys(company_dict))) {
-      let resp = await axios.post("/api/companies", {
+      let resp = await axios.post("/api/v1/companies", {
         company_name: company_name,
       });
       company = resp.data["new_company"];
     } else {
-      resp = await axios.get(`/api/companies/${company_dict[company_name]}`);
+      resp = await axios.get(`/api/v1/companies/${company_dict[company_name]}`);
       company = resp.data["company"];
     }
-    await axios.post(`/api/users/${user_id}/jobs`, {
+    await axios.post(`/api/v1/users/${user_id}/jobs`, {
       job_title: job_title,
       company: company,
       status: status,
@@ -175,80 +178,77 @@ async function main() {
     $("#newJobModal").modal("hide");
   });
 
-  // task view
+  //SHow job detail form
+  $(document).on("click", ".job-card", async function (e) {
+    e.preventDefault();
+    console.log($(e.target));
 
-  // Keep track of the currently active button
-  let activeTaskButton = $("#All");
-  let taskList = $("#All-list");
+    user_id = localStorage.getItem("user_id");
 
-  // Add a click event listener to each button
-  $(".btn-task").click(async function () {
-    // If there is an active button, remove the "active" class from it
-    if (activeTaskButton) {
-      activeTaskButton.removeClass("on-view");
-      taskList.addClass("d-none");
+    job_id = e.target.closest(".job-card").dataset.job_id;
+    localStorage.setItem("job_id", job_id);
+    job_resp = await axios.get(`/api/v1/users/${user_id}/jobs/${job_id}`);
+    job_data = job_resp.data;
+    $("#job-form [name='job_title']").val(job_data.job.job_title);
+    company_id = job_data.job.company_id;
+
+    company_resp = await axios.get(`/api/v1/companies/${company_id}`);
+    company_data = company_resp.data;
+    $("#job-form [name='company_name']").val(company_data.company.company_name);
+    $("#job-form [name='status']").val(job_data.job.status);
+    $("#job-form [name='post_url']").val(job_data.job.post_url);
+    $("#job-form [name='job_location']").val(job_data.job.job_location);
+    $("#job-form [name='notes']").val(job_data.job.notes);
+    $("#job-form [name='job_description']").val(job_data.job.job_description);
+
+    if ($(e.target).hasClass("link-job")) {
+      window.open(job_data.job.post_url);
+      return;
     }
 
-    // Add the "on-view" class to the clicked button
-    $(this).addClass("on-view");
-
-    // Set the clicked button as the on-view button
-    activeTaskButton = $(this);
-    $("#tasks-cat").text(`Tasks > ${$(this).text()}`);
-
-    task_cat = $(this).attr("id");
-    console.log($(`#${task_cat}-list`));
-    taskList = $(`#${task_cat}-list`);
-    $(`#${task_cat}-list`).removeClass("d-none");
-    // location.reload();
-    console.log(`#${task_cat}-list`);
-    // resp = await axios.get(`/api/users/${user_id}/tasks/${task_cat}`);
+    $("#JobDetailModal").modal("show");
   });
 
-  // Add a click event listener to each checkbox in the task list
-  $(".form-check-input").click(async function () {
-    console.log($(this));
-    const taskId = $(this).closest("li").data("task-id");
-    console.log(taskId);
-    // Update the status of the task in the database
-    await axios.patch(`/api/users/${user_id}/tasks/${taskId}`, {
-      completed: this.checked,
-    });
-
-    // Apply a strikethrough style to the task if it's checked
-    const task = $(`li[data-task-id=${taskId}]`);
-    console.log(task);
-    if (this.checked) {
-      console.log(task.find("s"));
-      task.css("text-decoration", "line-through");
-    } else {
-      task.css("text-decoration", "none");
-    }
-  });
-
-  // creat new task
-  $(document).on("click", "#create-task", async function (e) {
+  //save changes to job from detail form
+  $(document).on("click", "#save-job", async function (e) {
     e.preventDefault();
 
-    let user_id = await get_user_id();
-    let task = $("#task").val();
-    let job_id = $("#job").val();
+    user_id = localStorage.getItem("user_id");
+    job_id = localStorage.getItem("job_id");
+    const resp = await axios.get("/api/v1/companies");
+    let companies = resp.data["companies"];
+    let company_dict = {};
+    for (let i = 0; i < companies.length; i++) {
+      company_dict[companies[i]["company_name"]] = companies[i]["id"];
+    }
 
-    let startdate = $("#startdate").val();
-    let enddate = $("#enddate").val();
-    let notes = $("#notes").val();
+    let job_title = $("#job_title").val();
+    let company_name = $("#company_name").val();
+    let status = $("#status").val();
 
-    await axios.post(`/api/users/${user_id}/tasks`, {
-      task: task,
-      job_id: job_id,
-      startdate: startdate,
-      enddate: enddate,
-      notes: notes,
+    if (!(company_name in Object.keys(company_dict))) {
+      let resp = await axios.post("/api/v1/companies", {
+        company_name: company_name,
+      });
+      company = resp.data["new_company"];
+    } else {
+      resp = await axios.get(`/api/v1/companies/${company_dict[company_name]}`);
+      company = resp.data["company"];
+    }
+    await axios.patch(`/api/v1/users/${user_id}/jobs/${job_id}`, {
+      job_title: job_title,
+      company: company,
+      status: status,
+      post_url: post_url,
+      job_location: job_location,
+      note: notes,
+      job_description: job_description,
     });
-    location.reload();
-    $("#new_task_form")[0].reset();
-    $("#newTaskModal").modal("hide");
+    $("#JobDetailModal").modal("hide");
+    localStorage.removeItem("job_id");
   });
+
+  // delete job
 }
 
 main();
