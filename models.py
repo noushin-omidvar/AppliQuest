@@ -150,6 +150,13 @@ class Job(db.Model):
     user = db.relationship('User', backref='jobs')
     company = db.relationship('Company', backref="jobs")
 
+    @classmethod
+    def get_jobs_by_status(cls, user_id, status):
+        """Retrieve jobs with status 'wishlist' for a specific user ID."""
+
+        jobs = cls.query.filter_by(user_id=user_id, status=status).all()
+        return jobs
+
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
