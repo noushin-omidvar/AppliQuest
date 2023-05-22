@@ -25,7 +25,7 @@ endblock %} {% block content %}
             field.widget.input_type == 'select' %} {{
             field(class_="form-select") }} {% elif field.label.text == "Company"
             %}
-
+            <br />
             <div class="autocomplete">
               <input
                 id="company_name"
@@ -69,6 +69,11 @@ endblock %} {% block content %}
   >
     <!-- Start lane -->
     <div class="col col-sm-4 g-0">
+      <img src="/static/images/Scrum board-rafiki.svg" alt="" />
+    </div>
+    <!-- End lane -->
+    <!-- Start lane -->
+    <div class="col col-sm-4 g-0">
       <div class="card mb-3 card-col">
         <div class="card-header bg-light text-center">
           <h3 class="card-title p-1 h6 mb-1 wishlist">WISHLIST</h3>
@@ -88,21 +93,51 @@ endblock %} {% block content %}
           </div>
         </div>
         <div
-          class="card-body"
+          class="card-body text-truncate"
           style="height: calc(100vh - 180px); overflow-y: auto"
         >
-          <div class="tasks" id="Wishlist">
+          <div class="tasks w-100 h-100" id="Wishlist">
             {% for job in jobs['jobs_wished']%}
             <!-- Start task -->
             <div
-              class="card mb-3 cursor-grab job-card text-light"
+              class="card mb-3 cursor-grab job-card text-light flex-row"
               data-job_title="{{job.job_title}}"
               data-job_id="{{job.id}}"
               data-user_id="{{job.user_id}}"
             >
-              <div class="card-body">
+              <div
+                class="p-2 mx-2 mt-3 bg-light rounded-circle overflow"
+                style="width: 50px; height: 50px"
+              >
+                <img
+                  src="/static/images/building.png"
+                  class="card-img-left float-left"
+                  width="50px"
+                  height="auto"
+                />
+              </div>
+              <div class="card-body text-truncate">
                 <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
+                {% set today = datetime.utcnow().date() %} {% set days_passed =
+                (today - job.modified_at).days %}
+
+                <small>{{ days_passed }} days ago</small>
+              </div>
+
+              <div class="float-left me-3 mt-3">
+                <p>
+                  <i
+                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1"
+                  ></i>
+                </p>
+                <p>
+                  <a href="{{job.post_url}}">
+                    <i
+                      class="fa-solid fa-link link-job border border-light rounded p-1"
+                    ></i
+                  ></a>
+                </p>
               </div>
             </div>
             <!-- End task -->
@@ -135,21 +170,48 @@ endblock %} {% block content %}
           </div>
         </div>
         <div
-          class="card-body"
+          class="card-body text-truncate"
           style="height: calc(100vh - 180px); overflow-y: auto"
         >
-          <div class="tasks" id="Applied">
+          <div class="tasks w-100 h-100" id="Applied">
             {% for job in jobs['jobs_applied']%}
             <!-- Start task -->
             <div
-              class="card mb-3 cursor-grab job-card text-light"
+              class="card mb-3 cursor-grab job-card text-light flex-row"
               data-job_title="{{job.job_title}}"
               data-job_id="{{job.id}}"
               data-user_id="{{job.user_id}}"
             >
-              <div class="card-body">
+              <div
+                class="p-2 mx-2 mt-3 bg-light rounded-circle overflow"
+                style="width: 50px; height: 50px"
+              >
+                <img
+                  src="/static/images/building.png"
+                  class="card-img-left float-left"
+                  width="50px"
+                  height="auto"
+                />
+              </div>
+              <div class="card-body text-truncate">
                 <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
+                {% set today = datetime.utcnow().date() %} {% set days_passed =
+                (today - job.modified_at).days %}
+
+                <small>{{ days_passed }} days ago</small>
+              </div>
+              <div class="float-left me-3 mt-3">
+                <p>
+                  <i
+                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1"
+                  ></i>
+                </p>
+                <p class="fs-6">
+                  <i
+                    class="fa-solid fa-link fa-sm link-job border border-light rounded p-1 pt-2 pb-2"
+                  ></i>
+                </p>
               </div>
             </div>
             <!-- End task -->
@@ -182,21 +244,48 @@ endblock %} {% block content %}
           </div>
         </div>
         <div
-          class="card-body"
+          class="card-body text-truncate"
           style="height: calc(100vh - 180px); overflow-y: auto"
         >
-          <div class="tasks" id="Interview">
+          <div class="tasks w-100 h-100" id="Interview">
             {% for job in jobs['jobs_interview']%}
             <!-- Start task -->
             <div
-              class="card mb-3 cursor-grab job-card text-light"
+              class="card mb-3 cursor-grab job-card text-light flex-row"
               data-job_title="{{job.job_title}}"
               data-job_id="{{job.id}}"
               data-user_id="{{job.user_id}}"
             >
-              <div class="card-body">
+              <div
+                class="p-2 mx-2 mt-3 bg-light rounded-circle overflow"
+                style="width: 50px; height: 50px"
+              >
+                <img
+                  src="/static/images/building.png"
+                  class="card-img-left float-left"
+                  width="50px"
+                  height="auto"
+                />
+              </div>
+              <div class="card-body text-truncate">
                 <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
+                {% set today = datetime.utcnow().date() %} {% set days_passed =
+                (today - job.modified_at).days %}
+
+                <small>{{ days_passed }} days ago</small>
+              </div>
+              <div class="float-left me-3 mt-3">
+                <p>
+                  <i
+                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1"
+                  ></i>
+                </p>
+                <p>
+                  <i
+                    class="fa-solid fa-link link-job border border-light rounded p-1"
+                  ></i>
+                </p>
               </div>
             </div>
             <!-- End task -->
@@ -228,21 +317,48 @@ endblock %} {% block content %}
           </div>
         </div>
         <div
-          class="card-body"
+          class="card-body text-truncate"
           style="height: calc(100vh - 180px); overflow-y: auto"
         >
-          <div class="tasks" id="Offer">
+          <div class="tasks w-100 h-100" id="Offer">
             {% for job in jobs['jobs_offer']%}
             <!-- Start task -->
             <div
-              class="card mb-3 cursor-grab job-card text-light"
+              class="card mb-3 cursor-grab job-card text-light flex-row"
               data-job_title="{{job.job_title}}"
               data-job_id="{{job.id}}"
               data-user_id="{{job.user_id}}"
             >
-              <div class="card-body">
+              <div
+                class="p-2 mx-2 mt-3 bg-light rounded-circle overflow"
+                style="width: 50px; height: 50px"
+              >
+                <img
+                  src="/static/images/building.png"
+                  class="card-img-left float-left"
+                  width="50px"
+                  height="auto"
+                />
+              </div>
+              <div class="card-body text-truncate">
                 <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
+                {% set today = datetime.utcnow().date() %} {% set days_passed =
+                (today - job.modified_at).days %}
+
+                <small>{{ days_passed }} days ago</small>
+              </div>
+              <div class="float-left me-3 mt-3">
+                <p>
+                  <i
+                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1"
+                  ></i>
+                </p>
+                <p>
+                  <i
+                    class="fa-solid fa-link link-job border border-light rounded p-1"
+                  ></i>
+                </p>
               </div>
             </div>
             <!-- End task -->
@@ -257,7 +373,7 @@ endblock %} {% block content %}
     <div class="col col-sm-4 g-0">
       <div class="card mb-3 card-col">
         <div class="card-header bg-light text-center">
-          <h3 class="card-title h6 mb-1 p-2 rejected">REJECTED</h3>
+          <h3 class="card-title p-1 h6 mb-1 rejected">REJECTED</h3>
           <small class="mb-0 text-muted">
             {% if jobs['jobs_rejected'] |count >0 %} {{jobs['jobs_rejected']
             |count }} Jobs {% else %} {{jobs['jobs_rejected'] |count }} Job {%
@@ -275,21 +391,48 @@ endblock %} {% block content %}
           </div>
         </div>
         <div
-          class="card-body"
+          class="card-body text-truncate"
           style="height: calc(100vh - 180px); overflow-y: auto"
         >
-          <div class="tasks" id="Rejected">
+          <div class="tasks w-100 h-100" id="Rejected">
             {% for job in jobs['jobs_rejected']%}
             <!-- Start task -->
             <div
-              class="card mb-3 cursor-grab job-card text-light"
+              class="card mb-3 cursor-grab job-card text-light flex-row"
               data-job_title="{{job.job_title}}"
               data-job_id="{{job.id}}"
               data-user_id="{{job.user_id}}"
             >
-              <div class="card-body">
+              <div
+                class="p-2 mx-2 mt-3 bg-light rounded-circle overflow"
+                style="width: 50px; height: 50px"
+              >
+                <img
+                  src="/static/images/building.png"
+                  class="card-img-left float-left"
+                  width="50px"
+                  height="auto"
+                />
+              </div>
+              <div class="card-body text-truncate">
                 <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
+                {% set today = datetime.utcnow().date() %} {% set days_passed =
+                (today - job.modified_at).days %}
+
+                <small>{{ days_passed }} days ago</small>
+              </div>
+              <div class="float-left me-3 mt-3">
+                <p>
+                  <i
+                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1"
+                  ></i>
+                </p>
+                <p>
+                  <i
+                    class="fa-solid fa-link link-job border border-light rounded p-1"
+                  ></i>
+                </p>
               </div>
             </div>
             <!-- End task -->
@@ -299,6 +442,61 @@ endblock %} {% block content %}
       </div>
     </div>
     <!-- End lane -->
+  </div>
+</div>
+
+<!-- Job Detail Modal -->
+<div
+  class="modal fade"
+  id="JobDetailModal"
+  tabindex="-1"
+  aria-labelledby="JobDetailModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="JobDetailModalLabel">Add Job</h1>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" method="POST" id="job-form">
+          {{ new_job_form.hidden_tag() }} {% for field in job_detail_form if
+          field.widget.input_type != 'hidden' %} {% for error in field.errors %}
+          <span class="text-secondary">{{ error }}</span>
+          {% endfor %}
+          <div>
+            {{ field.label(class_="form-label fw-semibold") }} {% if
+            field.widget.input_type == 'select' %} {{
+            field(class_="form-select") }} {% elif field.label.text == "Company"
+            %}
+            <br />
+            <div class="autocomplete">
+              <input
+                id="company_name"
+                type="text"
+                name="company_name"
+                placeholder="Company"
+                class="form-control"
+              />
+            </div>
+
+            {% else %} {{ field(class_="form-control",
+            placeholder=field.label.text) }} {% endif %}
+          </div>
+          <br />
+          {% endfor %}
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Discard
+        </button>
+        <button type="button" class="btn btn-appliquest" id="save-job">
+          Save Job
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
