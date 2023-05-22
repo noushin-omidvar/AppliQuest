@@ -20,11 +20,15 @@
       src="https://kit.fontawesome.com/dc9be90fa8.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
     <header class="navbar navbar-expand-lg bd-navbar sticky-top bg-light">
-      <nav class="container">
+      <nav class="container-fluid">
         <div class="text-warning fw-bolder">
           <a class="navbar-brand text-warning" href="/"
             ><i class="fa-brands fa-algolia"></i>ppliQuest</a
@@ -36,6 +40,12 @@
         </div>
       </nav>
     </header>
+    <ul class="flashes">
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
     {% block content %} {% endblock %}
+    <script src="static/login.js"></script>
   </body>
 </html>
