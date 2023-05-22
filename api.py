@@ -140,6 +140,8 @@ def update_job(user_id, job_id):
         Job.id == job_id).all())
     db.session.query(Job).filter(
         Job.id == job_id).update(request.json)
+    db.session.query(Job).filter(
+        Job.id == job_id).update({'modified_at':date.today()})
     db.session.commit()
 
     return jsonify(job.to_dict())
