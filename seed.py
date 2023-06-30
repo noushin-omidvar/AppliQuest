@@ -146,11 +146,12 @@ with app.app_context():
     for i in range(50):
         user = random.choice(users)
         job = random.choice(jobs)
+        task_title = fake.text(max_nb_chars=20)
         task = fake.text(max_nb_chars=200)
         completed = random.choice([True, False])
         notes = fake.text()
         task = Task(user_id=user.id, job_id=job.id,
-                    task=task, completed=completed, notes=notes)
+                    task=task, task_title=task_title, completed=completed, notes=notes)
         db.session.add(task)
         documents.append(task)
 
