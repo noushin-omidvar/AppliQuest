@@ -345,10 +345,11 @@ def get_task(user_id, task_id):
 def update_task(user_id, task_id):
     # Retrieve the task from the database
     task = Task.query.get(task_id)
+    print(task)
     if task is None:
         # Return a 404 error if the task is not found
         return jsonify({'error': 'Task not found'}), 404
-
+    print(request.json)
     db.session.query(Task).filter(Task.id == task_id).update(request.json)
     db.session.commit()
 
@@ -357,7 +358,7 @@ def update_task(user_id, task_id):
 
 
 @api_bp.route('/users/<user_id>/tasks/<task_id>', methods=['DELETE'])
-def delete_task(task_id):
+def delete_task(task_id, user_id):
     """DELETE the contact"""
 
     # Retrieve the document from the database
