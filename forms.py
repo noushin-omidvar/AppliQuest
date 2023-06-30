@@ -70,9 +70,9 @@ class JobDetailForm(FlaskForm):
 class AddTaskForm(FlaskForm):
     """Add new task form"""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, jobs, *args, **kwargs):
         super(AddTaskForm, self).__init__(*args, **kwargs)
-        self.job.choices = [(job.id, job.job_title) for job in Job.query.all()]
+        self.job.choices = [(job.id, job.job_title) for job in jobs]
 
     def validate(self):
         if not super().validate():
