@@ -167,19 +167,20 @@ def show_tasks():
     if not g.user:
         return render_template('index.html')
 
-    new_task_form = AddTaskForm()
+    jobs = Job.query.filter(Job.user_id == g.user.id).all()
+    new_task_form = AddTaskForm(jobs)
     # task_detail_form = TaskDetailForm()
 
     tasks = {'All': Task.query.filter(Task.user_id == g.user.id).all(),
-             'Due-Today': Task.query.filter(Task.due_date == date.today()).all(),
-             'Past-Due': Task.query.filter(Task.due_date < date.today()).all(),
-             'Completed': Task.query.filter(Task.completed == True).all(),
+             'Due-Today': Task.query.filter(Task.user_id == g.user.id, Task.due_date == date.today()).all(),
+             'Past-Due': Task.query.filter(Task.user_id == g.user.id, Task.due_date < date.today()).all(),
+             'Completed': Task.query.filter(Task.user_id == g.user.id, Task.completed == True).all(),
 
-             'Wishlists': Task.query.join(Job).filter(Job.status == 'Wishlist').all(),
-             'Applications': Task.query.join(Job).filter(Job.status == 'Applied').all(),
-             'Interviews': Task.query.join(Job).filter(Job.status == 'Interview').all(),
-             'Offers': Task.query.join(Job).filter(Job.status == 'Offer').all(),
-             'Rejections': Task.query.join(Job).filter(Job.status == 'Rejected').all(),
+             'Wishlists': Task.query.join(Job).filter(Task.user_id == g.user.id, Job.status == 'Wishlist').all(),
+             'Applications': Task.query.join(Job).filter(Task.user_id == g.user.id, Job.status == 'Applied').all(),
+             'Interviews': Task.query.join(Job).filter(Task.user_id == g.user.id, Job.status == 'Interview').all(),
+             'Offers': Task.query.join(Job).filter(Task.user_id == g.user.id, Job.status == 'Offer').all(),
+             'Rejections': Task.query.join(Job).filter(Task.user_id == g.user.id, Job.status == 'Rejected').all(),
              }
     return render_template('users/tasks.html', user_id=g.user.id,
                            tasks=tasks,
@@ -231,7 +232,7 @@ def plot_data():
 @app.route('/analytics')
 def plot():
 
-    plot_html = job_search_funnel_plot()
-    plot_timeline = job_search_timeline()
-    # Render the template with the plot data
-    return render_template('users/analytics.html', plot_html=plot_html, plot_timeline=plot_timeline)
+    # plot_html = job_search_funnel_plot()
+    # plot_timeline = job_search_timeline()
+    # # Render the template with the plot data
+    return render_template('users/analytics.html')#, plot_html=plot_html, plot_timeline=plot_timeline)
