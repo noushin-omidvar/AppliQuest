@@ -11,8 +11,10 @@ endblock %} {% block content %}
 >
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="newJobModalLabel">Add Job</h1>
+      <div class="modal-header text-center">
+        <h1 class="modal-title fs-5 text-center" id="newJobModalLabel">
+          Add Job
+        </h1>
       </div>
       <div class="modal-body">
         <form autocomplete="off" method="POST" id="new_job_form">
@@ -45,10 +47,18 @@ endblock %} {% block content %}
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
           Discard
         </button>
-        <button type="button" class="btn btn-appliquest" id="create-job">
+        <button
+          type="button"
+          class="btn btn-warning text-light"
+          id="create-job"
+        >
           Save Job
         </button>
       </div>
@@ -56,7 +66,7 @@ endblock %} {% block content %}
   </div>
 </div>
 
-<div class="container-fluid board">
+<div class="container-fluid board" style="overflow: auto">
   <div
     class="row flex-nowrap"
     style="
@@ -68,12 +78,12 @@ endblock %} {% block content %}
     "
   >
     <!-- Start lane -->
-    <div class="col col-sm-4 g-0">
+    <div class="col col-sm-3 g-0">
       <img src="/static/images/Scrum board-rafiki.svg" alt="" />
     </div>
     <!-- End lane -->
     <!-- Start lane -->
-    <div class="col col-sm-4 g-0">
+    <div class="col col-sm-3 g-0">
       <div class="card mb-3 card-col">
         <div class="card-header bg-light text-center">
           <h3 class="card-title p-1 h6 mb-1 wishlist">WISHLIST</h3>
@@ -84,7 +94,7 @@ endblock %} {% block content %}
           <div class="d-grid mt-3">
             <button
               type="button"
-              class="btn btn-appliquest btn-sm ml-auto"
+              class="btn btn-secondary btn-sm ml-auto"
               data-bs-toggle="modal"
               data-bs-target="#newJobModal"
             >
@@ -106,7 +116,7 @@ endblock %} {% block content %}
               data-user_id="{{job.user_id}}"
             >
               <div
-                class="p-2 mx-2 mt-3 bg-light rounded-circle overflow"
+                class="ps-2 ms-2 mt-3 bg-light rounded-circle overflow"
                 style="width: 50px; height: 50px"
               >
                 <img
@@ -116,7 +126,7 @@ endblock %} {% block content %}
                   height="auto"
                 />
               </div>
-              <div class="card-body text-truncate">
+              <div class="card-body text-truncate ps-2">
                 <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
                 {% set today = datetime.utcnow().date() %} {% set days_passed =
@@ -128,15 +138,13 @@ endblock %} {% block content %}
               <div class="float-left me-3 mt-3">
                 <p>
                   <i
-                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1"
+                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1 job-icon"
                   ></i>
                 </p>
-                <p>
-                  <a href="{{job.post_url}}">
-                    <i
-                      class="fa-solid fa-link link-job border border-light rounded p-1"
-                    ></i
-                  ></a>
+                <p class="fs-6">
+                  <i
+                    class="fa-solid fa-link fa-sm link-job border border-light rounded job-icon"
+                  ></i>
                 </p>
               </div>
             </div>
@@ -149,7 +157,7 @@ endblock %} {% block content %}
     <!-- End lane -->
 
     <!-- Start lane -->
-    <div class="col col-sm-4 g-0">
+    <div class="col col-sm-3 g-0">
       <div class="card mb-3 card-col">
         <div class="card-header bg-light text-center">
           <h3 class="card-title p-1 h6 mb-1 applied">APPLIED</h3>
@@ -161,7 +169,7 @@ endblock %} {% block content %}
           <div class="d-grid mt-3">
             <button
               type="button"
-              class="btn btn-appliquest btn-sm ml-auto"
+              class="btn btn-secondary btn-sm ml-auto"
               data-bs-toggle="modal"
               data-bs-target="#newJobModal"
             >
@@ -193,7 +201,7 @@ endblock %} {% block content %}
                   height="auto"
                 />
               </div>
-              <div class="card-body text-truncate">
+              <div class="card-body text-truncate ps-2">
                 <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
                 {% set today = datetime.utcnow().date() %} {% set days_passed =
@@ -204,12 +212,12 @@ endblock %} {% block content %}
               <div class="float-left me-3 mt-3">
                 <p>
                   <i
-                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1"
+                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1 job-icon"
                   ></i>
                 </p>
                 <p class="fs-6">
                   <i
-                    class="fa-solid fa-link fa-sm link-job border border-light rounded p-1 pt-2 pb-2"
+                    class="fa-solid fa-link fa-sm link-job border border-light rounded job-icon"
                   ></i>
                 </p>
               </div>
@@ -223,7 +231,7 @@ endblock %} {% block content %}
     <!-- End lane -->
 
     <!-- Start lane -->
-    <div class="col col-sm-4 g-0">
+    <div class="col col-sm-3 g-0">
       <div class="card mb-3 card-col">
         <div class="card-header bg-light text-center">
           <h3 class="card-title p-1 h6 mb-1 interview">INTERVIEW</h3>
@@ -235,7 +243,7 @@ endblock %} {% block content %}
           <div class="d-grid mt-3">
             <button
               type="button"
-              class="btn btn-appliquest btn-sm ml-auto"
+              class="btn btn-secondary btn-sm ml-auto"
               data-bs-toggle="modal"
               data-bs-target="#newJobModal"
             >
@@ -267,7 +275,7 @@ endblock %} {% block content %}
                   height="auto"
                 />
               </div>
-              <div class="card-body text-truncate">
+              <div class="card-body text-truncate ps-2">
                 <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
                 {% set today = datetime.utcnow().date() %} {% set days_passed =
@@ -278,12 +286,12 @@ endblock %} {% block content %}
               <div class="float-left me-3 mt-3">
                 <p>
                   <i
-                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1"
+                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1 job-icon"
                   ></i>
                 </p>
-                <p>
+                <p class="fs-6">
                   <i
-                    class="fa-solid fa-link link-job border border-light rounded p-1"
+                    class="fa-solid fa-link fa-sm link-job border border-light rounded job-icon"
                   ></i>
                 </p>
               </div>
@@ -297,7 +305,7 @@ endblock %} {% block content %}
     <!-- End lane -->
 
     <!-- Start lane -->
-    <div class="col col-sm-4 g-0">
+    <div class="col col-sm-3 g-0">
       <div class="card mb-3 card-col">
         <div class="card-header bg-light text-center">
           <h3 class="card-title p-1 h6 mb-1 offer">OFFER</h3>
@@ -308,7 +316,7 @@ endblock %} {% block content %}
           <div class="d-grid mt-3">
             <button
               type="button"
-              class="btn btn-appliquest btn-sm ml-auto"
+              class="btn btn-secondary btn-sm ml-auto"
               data-bs-toggle="modal"
               data-bs-target="#newJobModal"
             >
@@ -340,7 +348,7 @@ endblock %} {% block content %}
                   height="auto"
                 />
               </div>
-              <div class="card-body text-truncate">
+              <div class="card-body text-truncate ps-2">
                 <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
                 {% set today = datetime.utcnow().date() %} {% set days_passed =
@@ -351,12 +359,12 @@ endblock %} {% block content %}
               <div class="float-left me-3 mt-3">
                 <p>
                   <i
-                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1"
+                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1 job-icon"
                   ></i>
                 </p>
-                <p>
+                <p class="fs-6">
                   <i
-                    class="fa-solid fa-link link-job border border-light rounded p-1"
+                    class="fa-solid fa-link fa-sm link-job border border-light rounded job-icon"
                   ></i>
                 </p>
               </div>
@@ -370,7 +378,7 @@ endblock %} {% block content %}
     <!-- End lane -->
 
     <!-- Start lane -->
-    <div class="col col-sm-4 g-0">
+    <div class="col col-sm-3 g-0">
       <div class="card mb-3 card-col">
         <div class="card-header bg-light text-center">
           <h3 class="card-title p-1 h6 mb-1 rejected">REJECTED</h3>
@@ -382,7 +390,7 @@ endblock %} {% block content %}
           <div class="d-grid mt-3">
             <button
               type="button"
-              class="btn btn-appliquest btn-sm ml-auto"
+              class="btn btn-secondary btn-sm ml-auto"
               data-bs-toggle="modal"
               data-bs-target="#newJobModal"
             >
@@ -414,7 +422,7 @@ endblock %} {% block content %}
                   height="auto"
                 />
               </div>
-              <div class="card-body text-truncate">
+              <div class="card-body text-truncate ps-2">
                 <b>{{job.job_title}}</b>
                 <p class="mb-0">{{job.company.company_name}}</p>
                 {% set today = datetime.utcnow().date() %} {% set days_passed =
@@ -425,12 +433,12 @@ endblock %} {% block content %}
               <div class="float-left me-3 mt-3">
                 <p>
                   <i
-                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1"
+                    class="fa-regular fa-trash-can delete-job border border-light rounded p-1 job-icon"
                   ></i>
                 </p>
-                <p>
+                <p class="fs-6">
                   <i
-                    class="fa-solid fa-link link-job border border-light rounded p-1"
+                    class="fa-solid fa-link fa-sm link-job border border-light rounded job-icon"
                   ></i>
                 </p>
               </div>
@@ -455,8 +463,13 @@ endblock %} {% block content %}
 >
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="JobDetailModalLabel">Add Job</h1>
+      <div class="modal-header text-center">
+        <h1
+          class="modal-title fs-5 text-center float-center"
+          id="JobDetailModalLabel"
+        >
+          Add Job
+        </h1>
       </div>
       <div class="modal-body">
         <form autocomplete="off" method="POST" id="job-form">
@@ -489,10 +502,14 @@ endblock %} {% block content %}
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
           Discard
         </button>
-        <button type="button" class="btn btn-appliquest" id="save-job">
+        <button type="button" class="btn btn-warning text-light" id="save-job">
           Save Job
         </button>
       </div>
