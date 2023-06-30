@@ -15,7 +15,6 @@ api_bp = Blueprint('api/v1', __name__)
 def user_id():
     # Get the user id from the session
     user_id = session.get(CURR_USER_KEY)
-    print(user_id)
     # Return the user id as JSON
     return jsonify({'user_id': user_id})
 
@@ -67,7 +66,6 @@ def update_user(user_id):
 
     db.session.query(User).filter(id == user_id).update(request.json)
     db.session.commit()
-    print(user)
     # Return the updated user data
     return jsonify(user.to_dict())
 
@@ -77,7 +75,7 @@ def delete_user(user_id):
     """DELETE the user"""
 
     # Retrieve the user from the database
-    user = User.query.get_404(user_id)
+    user = User.query.get_or_404(user_id)
 
     if user is None:
         # Return a 404 error if the user is not found
@@ -116,8 +114,9 @@ def create_job(user_id):
 def get_jobs(user_id):
     """get job by job_id"""
 
-    jobs = [job.job_title for job in Job.query.all()]
-    return jsonify(jobs=jobs.to_dict())
+    jobs = [ job.to_dict() for job in Job.query.filter(Job.user_id== user_id).all()]
+
+    return jsonify(jobs=jobs)
 
 
 @api_bp.route('/users/<user_id>/jobs/<job_id>')
@@ -136,8 +135,7 @@ def update_job(user_id, job_id):
     if job is None:
         return jsonify({'error': 'Job not found'}), 404
 
-    print(db.session.query(Job).filter(
-        Job.id == job_id).all())
+
     db.session.query(Job).filter(
         Job.id == job_id).update(request.json)
     db.session.query(Job).filter(
@@ -148,11 +146,11 @@ def update_job(user_id, job_id):
 
 
 @api_bp.route('/users/<user_id>/jobs/<job_id>', methods=['DELETE'])
-def delete_job(job_id):
+def delete_job(user_id, job_id):
     """DELETE the job"""
 
     # Retrieve the user from the database
-    job = Job.query.get_404(job_id)
+    job = Job.query.get_or_404(job_id)
 
     if job is None:
         # Return a 404 error if the job is not found
@@ -216,7 +214,7 @@ def delete_contact(contact_id):
     """DELETE the contact"""
 
     # Retrieve the user from the database
-    contact = Contact.query.get_404(contact_id)
+    contact = Contact.query.get_or_404(contact_id)
 
     if contact is None:
         # Return a 404 error if the contact is not found
@@ -276,7 +274,7 @@ def delete_document(document_id):
     """DELETE the contact"""
 
     # Retrieve the document from the database
-    document = Document.query.get_404(document_id)
+    document = Document.query.get_or_404(document_id)
 
     if document is None:
         # Return a 404 error if the document is not found
@@ -312,36 +310,26 @@ def create_task(user_id):
 def get_tasks(user_id, task_cat):
     """get tasks of user by category"""
     if task_cat == 'All':
-        print(task_cat)
         tasks = Task.query.filter(user_id == user_id).all()
     elif task_cat == 'Due Today':
-        print(task_cat)
-        tasks = Task.query.filter(Task.due_date == date.today()).all()
+        tasks = Task.query.filter(user_id == user_id, Task.due_date == date.today()).all()
     elif task_cat == 'Past Due':
-        print(task_cat)
-        tasks = Task.query.filter(Task.due_date < date.today()).all()
+        tasks = Task.query.filter(user_id == user_id, Task.due_date < date.today()).all()
     elif task_cat == 'Completed':
-        print(task_cat)
-        tasks = Task.query.filter(Task.completed == True).all()
+        tasks = Task.query.filter(user_id == user_id, Task.completed == True).all()
 
     elif task_cat == 'Wishlists':
-        print(task_cat)
-        tasks = Task.query.filter(Task.job.status == 'Wishlist').all()
+        tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Wishlist').all()
     elif task_cat == 'Applications':
-        print(task_cat)
-        tasks = Task.query.filter(Task.job.status == 'Applied').all()
+        tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Applied').all()
     elif task_cat == 'Interviews':
-        print(task_cat)
-        tasks = Task.query.filter(Task.job.status == 'Interview').all()
+        tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Interview').all()
     elif task_cat == 'Offers':
-        print(task_cat)
-        tasks = Task.query.filter(Task.job.status == 'Offer').all()
+        tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Offer').all()
     elif task_cat == 'Rejections':
-        print(task_cat)
-        tasks = Task.query.filter(Task.job.status == 'Rejected').all()
+        tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Rejected').all()
 
     tasks = [task.to_dict() for task in tasks]
-    print(tasks)
     return jsonify(tasks=tasks)
 
 
@@ -357,7 +345,6 @@ def get_task(user_id, task_id):
 def update_task(user_id, task_id):
     # Retrieve the task from the database
     task = Task.query.get(task_id)
-    print(request.json)
     if task is None:
         # Return a 404 error if the task is not found
         return jsonify({'error': 'Task not found'}), 404
@@ -374,7 +361,7 @@ def delete_task(task_id):
     """DELETE the contact"""
 
     # Retrieve the document from the database
-    task = Task.query.get_404(task_id)
+    task = Task.query.get_or_404(task_id)
 
     if task is None:
         # Return a 404 error if the document is not found
@@ -434,7 +421,7 @@ def delete_company(user_id, company_id):
     """DELETE the contact"""
 
     # Retrieve the document from the database
-    company = Company.query.get_404(company_id)
+    company = Company.query.get_or_404(company_id)
 
     if company is None:
         # Return a 404 error if the company is not found
