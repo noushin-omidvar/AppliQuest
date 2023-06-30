@@ -270,6 +270,9 @@ class Task(db.Model):
                        db.ForeignKey('jobs.id'),
                        nullable=True)
 
+    task_title = db.Column(db.String(20),
+                     nullable=False)
+    
     task = db.Column(db.String,
                      nullable=False)
 
