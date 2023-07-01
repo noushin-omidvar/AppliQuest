@@ -4,7 +4,7 @@ from flask import Flask, render_template, session, g, redirect, flash, jsonify, 
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, User, Job, Company, Document, Task, Contact
-from forms import SignUpForm, LoginForm, AddJobForm, JobDetailForm, AddTaskForm, TaskDetailForm, AddContactForm, detailContactForm, AddDocumentForm
+from forms import SignUpForm, LoginForm, AddJobForm, JobDetailForm, AddTaskForm, TaskDetailForm, AddContactForm, detailContactForm, AddDocumentForm, detailDocumentForm
 from datetime import date
 from api import api_bp
 
@@ -211,9 +211,11 @@ def show_documents():
 
     documents = Document.query.filter(Document.user_id == g.user.id).all()
     new_document_form = AddDocumentForm()
+    detail_document_form = detailDocumentForm()
     return render_template('users/documents.html',
                            documents=documents,
-                           new_document_form=new_document_form)
+                           new_document_form=new_document_form,
+                           detail_document_form=detail_document_form)
 
 
 @app.route('/plot_data')

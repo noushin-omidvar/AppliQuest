@@ -249,6 +249,7 @@ def get_document(user_id, document_id):
     """get document by document_id"""
 
     document = Document.query.get_or_404(document_id)
+    print(document)
     return jsonify(document=document.to_dict())
 
 
@@ -269,7 +270,7 @@ def update_document(user_id, document_id):
 
 
 @api_bp.route('/users/<user_id>/documents/<document_id>', methods=['DELETE'])
-def delete_document(document_id):
+def delete_document(user_id, document_id):
     """DELETE the contact"""
 
     # Retrieve the document from the database

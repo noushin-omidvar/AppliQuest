@@ -1,4 +1,4 @@
-const user_id = localStorage.getItem("user_id");
+// const user_id = localStorage.getItem("user_id");
 $(".form-check-input").on("click", async (e) => {
   const taskItem = e.target.closest(".list-group-item");
   const taskTextElement = taskItem.querySelector(".task-text");

@@ -190,3 +190,15 @@ class AddDocumentForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     category = SelectField('Category')
     submit = SubmitField('Upload')
+
+
+class detailDocumentForm(FlaskForm):
+    def __init__(self, *args, **kwargs):
+        super(detailDocumentForm, self).__init__(*args, **kwargs)
+        self.category.choices = ['Cover Letter',
+                                 'Resume', 'Transcript', 'Certificate']
+
+    document = FileField('Document', validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired()])
+    category = SelectField('Category')
+    submit = SubmitField('Upload')
