@@ -201,8 +201,7 @@ def update_contact(user_id, contact_id):
     if contact is None:
         # Return a 404 error if the contact is not found
         return jsonify({'error': 'Contact not found'}), 404
-
-    db.session.query(Contact).filter(id=contact_id).update(request.json)
+    db.session.query(Contact).filter(Contact.id == contact_id, Contact.user_id == user_id).update(request.json)
     db.session.commit()
 
     # Return the updated contact data
@@ -210,7 +209,7 @@ def update_contact(user_id, contact_id):
 
 
 @api_bp.route('/users/<user_id>/contacts/<contact_id>', methods=['DELETE'])
-def delete_contact(contact_id):
+def delete_contact(contact_id, user_id):
     """DELETE the contact"""
 
     # Retrieve the user from the database
@@ -306,31 +305,31 @@ def create_task(user_id):
     return jsonify(new_task=new_task.to_dict())
 
 
-@api_bp.route('/users/<user_id>/tasks/<task_cat>')
-def get_tasks(user_id, task_cat):
-    """get tasks of user by category"""
-    if task_cat == 'All':
-        tasks = Task.query.filter(user_id == user_id).all()
-    elif task_cat == 'Due Today':
-        tasks = Task.query.filter(user_id == user_id, Task.due_date == date.today()).all()
-    elif task_cat == 'Past Due':
-        tasks = Task.query.filter(user_id == user_id, Task.due_date < date.today()).all()
-    elif task_cat == 'Completed':
-        tasks = Task.query.filter(user_id == user_id, Task.completed == True).all()
+# @api_bp.route('/users/<user_id>/tasks/cats/<task_cat>')
+# def get_tasks(user_id, task_cat):
+#     """get tasks of user by category"""
+#     if task_cat == 'All':
+#         tasks = Task.query.filter(user_id == user_id).all()
+#     elif task_cat == 'Due Today':
+#         tasks = Task.query.filter(user_id == user_id, Task.due_date == date.today()).all()
+#     elif task_cat == 'Past Due':
+#         tasks = Task.query.filter(user_id == user_id, Task.due_date < date.today()).all()
+#     elif task_cat == 'Completed':
+#         tasks = Task.query.filter(user_id == user_id, Task.completed == True).all()
 
-    elif task_cat == 'Wishlists':
-        tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Wishlist').all()
-    elif task_cat == 'Applications':
-        tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Applied').all()
-    elif task_cat == 'Interviews':
-        tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Interview').all()
-    elif task_cat == 'Offers':
-        tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Offer').all()
-    elif task_cat == 'Rejections':
-        tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Rejected').all()
+#     elif task_cat == 'Wishlists':
+#         tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Wishlist').all()
+#     elif task_cat == 'Applications':
+#         tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Applied').all()
+#     elif task_cat == 'Interviews':
+#         tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Interview').all()
+#     elif task_cat == 'Offers':
+#         tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Offer').all()
+#     elif task_cat == 'Rejections':
+#         tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Rejected').all()
 
-    tasks = [task.to_dict() for task in tasks]
-    return jsonify(tasks=tasks)
+#     tasks = [task.to_dict() for task in tasks]
+#     return jsonify(tasks=tasks)
 
 
 @api_bp.route('/users/<user_id>/tasks/<task_id>')
@@ -345,11 +344,10 @@ def get_task(user_id, task_id):
 def update_task(user_id, task_id):
     # Retrieve the task from the database
     task = Task.query.get(task_id)
-    print(task)
     if task is None:
         # Return a 404 error if the task is not found
         return jsonify({'error': 'Task not found'}), 404
-    print(request.json)
+
     db.session.query(Task).filter(Task.id == task_id).update(request.json)
     db.session.commit()
 
@@ -410,7 +408,7 @@ def update_company(user_id, company_id):
         # Return a 404 error if the company is not found
         return jsonify({'error': 'Company not found'}), 404
 
-    db.session.query(Company).filter(id=company_id).update(request.json)
+    db.session.query(Company).filter(id==company_id).update(request.json)
     db.session.commit()
 
     # Return the updated company data
@@ -419,7 +417,7 @@ def update_company(user_id, company_id):
 
 @api_bp.route('/companies/<company_id>', methods=['DELETE'])
 def delete_company(user_id, company_id):
-    """DELETE the contact"""
+    """DELETE the company"""
 
     # Retrieve the document from the database
     company = Company.query.get_or_404(company_id)
