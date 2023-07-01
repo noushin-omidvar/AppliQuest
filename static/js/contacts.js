@@ -1,4 +1,4 @@
-const user_id = localStorage.getItem("user_id");
+// const user_id = localStorage.getItem("user_id");
 
 // Delete button click event handler
 $(".delete-contact").on("click", async function (e) {
@@ -28,7 +28,6 @@ $(".edit-contact").on("click", async function (e) {
   $("#detail_contact_form [name='phone']").val(contact_data.contact.phone);
   $("#detail_contact_form [name='notes']").val(contact_data.contact.notes);
 
-  console.log($("#detail_contact_form [name='company']").val());
   // Creat new contact
   $("button#create-contact").on("click", async function (e) {
     await axios.patch(`/api/v1/users/${user_id}/contacts/${contactId}`, {
