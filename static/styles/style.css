@@ -4,7 +4,14 @@ html, body ,  .task-panel{
     font-family: Lato;
     color: rgba(25, 4, 69, 0.8);
   }
-  
+
+  a { color: inherit; } 
+
+  .headline{
+    font-weight: bolder;
+    font-size: 5em;
+  }
+
 .form-check-input{
   margin-left:15px
 }
@@ -85,7 +92,7 @@ html, body ,  .task-panel{
 .nav-link:hover, .navbar-nav .active{
   font-weight: bolder;
   border: 1px solid transparent;
-  border-radius: 10px;;
+  border-radius: 10px;
     box-shadow: inset 0 0 1px 1px rgba(25,4,69,0.3);
     background-color: transparent;}
 
@@ -121,33 +128,38 @@ card-header, card-body{
 }
 
 .btn-secondary{
-  background-color: whitesmoke;
+  background-color: #e9ecef;
   color:#4a4a4a
+}
+
+.btn-secondary:hover{
+  background-color: #c3c5c7;
+  color:whitesmoke;
 }
 
 
 .log-btn{
-background-color:rgb(106, 79, 235);
-border-color: rgb(106, 79, 235);
-color:whitesmoke
+background-color:#ffc107;;
+border-color: #ffc107;;
+color:white
 }
 
 .btn-appliquest{
-  background-color:rgb(106, 79, 235);
-  border-color: rgb(106, 79, 235);
-  color:whitesmoke  
+  background-color:#ffc107;;
+  border-color: #ffc107;;
+  color:white  
 }
 
 .btn-appliquest:hover{
-  color:rgb(106, 79, 235);
-  border-color: rgb(106, 79, 235);
-  background-color:whitesmoke ;
+  color:#ffc107;
+  border-color: #ffc107;
+  background-color:white ;
   cursor: pointer;
 }
 
 .btn-task.on-view{
-  background-color:rgb(106, 79, 235);
-  border-color: rgb(106, 79, 235);
+  background-color:#ffc107;
+  border-color: rgb(240, 7173, 78);
   color:whitesmoke ;
   text-align:left;
   font-family: lato;
@@ -163,7 +175,7 @@ color:whitesmoke
 
 .btn-task:hover{
   cursor: pointer;
-  border-color: rgb(106, 79, 235);
+  border-color: #ffc107;
 }
 
 .border-end {
@@ -172,4 +184,47 @@ color:whitesmoke
 
 select[data-placeholder] option[value=""] {
   color: #a0a0a0;
+}
+
+.job-card:hover{
+  cursor:pointer;
+}
+
+.delete-job:hover{
+  cursor:pointer;
+  transform: translate3d(0, -.25rem, 0);
+
+}
+
+.link-job:hover{
+  cursor:pointer;
+  transform: translate3d(0, -.25rem, 0);
+  /* transition: transform .25s, background .25s; */
+
+}
+
+.link-job{
+  text-decoration: none;
+}
+
+.job-icon {
+  width: 25px; /* Adjust the width as needed */
+  height: 25px; /* Adjust the height as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top:  0.7rem;
+  padding-bottom:  0; 
+  padding-right: 0;
+  padding-left:0.15rem;
+  line-height: 1; /* Adjust the line-height as needed */
+}
+
+
+.parent-container {
+  box-sizing: border-box;
+}
+
+.contact-card.card-body{
+  text-overflow: ellipsis;
 }

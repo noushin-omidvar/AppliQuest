@@ -4,7 +4,7 @@ from flask import Flask, render_template, session, g, redirect, flash, jsonify, 
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, User, Job, Company, Document, Task, Contact
-from forms import SignUpForm, LoginForm, AddJobForm, JobDetailForm, AddTaskForm, AddContactForm, AddDocumentForm
+from forms import SignUpForm, LoginForm, AddJobForm, JobDetailForm, AddTaskForm, TaskDetailForm, AddContactForm, detailContactForm, AddDocumentForm
 from datetime import date
 from api import api_bp
 
@@ -169,7 +169,8 @@ def show_tasks():
 
     jobs = Job.query.filter(Job.user_id == g.user.id).all()
     new_task_form = AddTaskForm(jobs)
-    # task_detail_form = TaskDetailForm()
+    print(jobs)
+    task_detail_form = TaskDetailForm(jobs)
 
     tasks = {'All': Task.query.filter(Task.user_id == g.user.id).all(),
              'Due-Today': Task.query.filter(Task.user_id == g.user.id, Task.due_date == date.today()).all(),
@@ -184,8 +185,8 @@ def show_tasks():
              }
     return render_template('users/tasks.html', user_id=g.user.id,
                            tasks=tasks,
-                           new_task_form=new_task_form,)
-    #    task_detail_form=task_detail_form)
+                           new_task_form=new_task_form,
+       task_detail_form=task_detail_form)
 
 
 @app.route('/contacts')
@@ -196,9 +197,11 @@ def show_contacts():
     contacts = Contact.query.filter(Contact.user_id == g.user.id).all()
     print(contacts)
     new_contact_form = AddContactForm()
+    detail_contact_form = detailContactForm()
     return render_template('users/contacts.html',
                            contacts=contacts,
-                           new_contact_form=new_contact_form)
+                           new_contact_form=new_contact_form,
+                           detail_contact_form=detail_contact_form)
 
 
 @app.route('/documents')
