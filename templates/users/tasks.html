@@ -60,6 +60,59 @@ endblock %} {% block content %}
   </div>
 </div>
 
+<!-- Edit Task Modal -->
+<div
+  class="modal fade"
+  id="detailTaskModal"
+  tabindex="-1"
+  aria-labelledby="detailTaskModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog w-75">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="detailTaskModalLabel">Add Task</h1>
+      </div>
+      <div class="modal-body">
+        <form method="POST" id="detail_task_form">
+          {{ new_task_form.hidden_tag() }} {% for field in task_detail_form if
+          field.widget.input_type != 'hidden' %} {% for error in field.errors %}
+          <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+          <div>
+            {% if field.label.text == "Mark as Completed" %}
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="CheckCompleted"
+              />
+              <label class="form-check-label" for="CheckCompleted"
+                >Mark as Completed</label
+              >
+            </div>
+            {% else %} {{ field.label(class_="form-label fw-semibold") }} {{
+            field(class_="form-control", placeholder=field.label.text) }} {%
+            endif %}
+          </div>
+          <br />
+          {% endfor %}
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Discard
+        </button>
+        <button type="button" class="btn btn-warning" id="create-task">
+          Save Task
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-3 mt-3">
@@ -127,7 +180,7 @@ endblock %} {% block content %}
                   %}
                 />
               </div>
-              <div class="col-8 ps-2">
+              <div class="col-9 ps-2">
                 {% if task.completed %}
                 <s class="task-text" style="display: inline; margin-left: 10px"
                   >{{task.task_title}}</s
@@ -141,7 +194,7 @@ endblock %} {% block content %}
                 </p>
                 {% endif %}
               </div>
-              <div class="col-3">
+              <div class="col-2">
                 <i class="edit-button fa-solid fa-pencil px-2"></i>
                 <i class="delete-button fa-regular fa-trash-can px-2"></i>
               </div>
@@ -173,7 +226,7 @@ endblock %} {% block content %}
                   %}
                 />
               </div>
-              <div class="col-8 ps-2">
+              <div class="col-9 ps-2">
                 {% if task.completed %}
                 <s class="task-text" style="display: inline; margin-left: 10px"
                   >{{task.task_title}}</s
@@ -187,7 +240,7 @@ endblock %} {% block content %}
                 </p>
                 {% endif %}
               </div>
-              <div class="col-3">
+              <div class="col-2">
                 <i class="edit-button fa-solid fa-pencil px-2"></i>
                 <i class="delete-button fa-regular fa-trash-can px-2"></i>
               </div>
@@ -217,7 +270,7 @@ endblock %} {% block content %}
                   %}
                 />
               </div>
-              <div class="col-8 ps-2">
+              <div class="col-9 ps-2">
                 {% if task.completed %}
                 <s class="task-text" style="display: inline; margin-left: 10px"
                   >{{task.task_title}}</s
@@ -231,7 +284,7 @@ endblock %} {% block content %}
                 </p>
                 {% endif %}
               </div>
-              <div class="col-3">
+              <div class="col-2">
                 <i class="edit-button fa-solid fa-pencil px-2"></i>
                 <i class="delete-button fa-regular fa-trash-can px-2"></i>
               </div>
@@ -261,7 +314,7 @@ endblock %} {% block content %}
                   %}
                 />
               </div>
-              <div class="col-8 ps-2">
+              <div class="col-9 ps-2">
                 {% if task.completed %}
                 <s class="task-text" style="display: inline; margin-left: 10px"
                   >{{task.task_title}}</s
@@ -275,7 +328,7 @@ endblock %} {% block content %}
                 </p>
                 {% endif %}
               </div>
-              <div class="col-3">
+              <div class="col-2">
                 <i class="edit-button fa-solid fa-pencil px-2"></i>
                 <i class="delete-button fa-regular fa-trash-can px-2"></i>
               </div>
@@ -306,7 +359,7 @@ endblock %} {% block content %}
                   %}
                 />
               </div>
-              <div class="col-8 ps-2">
+              <div class="col-9 ps-2">
                 {% if task.completed %}
                 <s class="task-text" style="display: inline; margin-left: 10px"
                   >{{task.task_title}}</s
@@ -320,7 +373,7 @@ endblock %} {% block content %}
                 </p>
                 {% endif %}
               </div>
-              <div class="col-3">
+              <div class="col-2">
                 <i class="edit-button fa-solid fa-pencil px-2"></i>
                 <i class="delete-button fa-regular fa-trash-can px-2"></i>
               </div>
@@ -351,7 +404,7 @@ endblock %} {% block content %}
                   %}
                 />
               </div>
-              <div class="col-8 ps-2">
+              <div class="col-9 ps-2">
                 {% if task.completed %}
                 <s class="task-text" style="display: inline; margin-left: 10px"
                   >{{task.task_title}}</s
@@ -365,7 +418,7 @@ endblock %} {% block content %}
                 </p>
                 {% endif %}
               </div>
-              <div class="col-3">
+              <div class="col-2">
                 <i class="edit-button fa-solid fa-pencil px-2"></i>
                 <i class="delete-button fa-regular fa-trash-can px-2"></i>
               </div>
@@ -396,7 +449,7 @@ endblock %} {% block content %}
                   %}
                 />
               </div>
-              <div class="col-8 ps-2">
+              <div class="col-9 ps-2">
                 {% if task.completed %}
                 <s class="task-text" style="display: inline; margin-left: 10px"
                   >{{task.task_title}}</s
@@ -410,7 +463,7 @@ endblock %} {% block content %}
                 </p>
                 {% endif %}
               </div>
-              <div class="col-3">
+              <div class="col-2">
                 <i class="edit-button fa-solid fa-pencil px-2"></i>
                 <i class="delete-button fa-regular fa-trash-can px-2"></i>
               </div>
@@ -440,7 +493,7 @@ endblock %} {% block content %}
                   %}
                 />
               </div>
-              <div class="col-8 ps-2">
+              <div class="col-9 ps-2">
                 {% if task.completed %}
                 <s class="task-text" style="display: inline; margin-left: 10px"
                   >{{task.task_title}}</s
@@ -454,7 +507,7 @@ endblock %} {% block content %}
                 </p>
                 {% endif %}
               </div>
-              <div class="col-3">
+              <div class="col-2">
                 <i class="edit-button fa-solid fa-pencil px-2"></i>
                 <i class="delete-button fa-regular fa-trash-can px-2"></i>
               </div>
@@ -485,7 +538,7 @@ endblock %} {% block content %}
                   %}
                 />
               </div>
-              <div class="col-8 ps-2">
+              <div class="col-9 ps-2">
                 {% if task.completed %}
                 <s class="task-text" style="display: inline; margin-left: 10px"
                   >{{task.task_title}}</s
@@ -499,7 +552,7 @@ endblock %} {% block content %}
                 </p>
                 {% endif %}
               </div>
-              <div class="col-3">
+              <div class="col-2">
                 <i class="edit-button fa-solid fa-pencil px-2"></i>
                 <i class="delete-button fa-regular fa-trash-can px-2"></i>
               </div>

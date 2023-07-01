@@ -1,0 +1,59 @@
+{% extends 'base_login.html' %} {% block title %}AppliQuest: Job board{%
+endblock %} {% block content %}
+
+<div class="container-fluid board" style="overflow: auto">
+  <div
+    class="row flex-nowrap"
+    style="
+      top: 0px;
+      bottom: 0px;
+      display: flex;
+      background-color: rgb(253, 253, 255);
+      flex-direction: row;
+    "
+  >
+    <!-- Start lane -->
+    <div class="col col-sm-3 g-0">
+      <img src="/static/images/Scrum board-rafiki.svg" alt="" />
+    </div>
+    <!-- End lane -->
+
+    <div class="col col-sm-9">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="card-title mb-2">
+            <h6>Job Search Funnel</h6>
+          </div>
+          <div>
+            <canvas id="funnelChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="card-title mb-2">
+            <h6>Job Search Funnel</h6>
+            <div id="chartContainer">
+              <canvas id="jobTimeChart"></canvas>
+              <div id="chartButtons">
+                <button class="chart-button" data-interval="day">Daily</button>
+                <button class="chart-button" data-interval="week">
+                  Weekly
+                </button>
+                <button class="chart-button" data-interval="month">
+                  Monthly
+                </button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <canvas id="jobTimeChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endblock %}
+  </div>
+</div>

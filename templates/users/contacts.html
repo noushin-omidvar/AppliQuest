@@ -25,17 +25,10 @@ endblock %} {% block content %}
             <span class="text-danger">{{ error }}</span>
             {% endfor %}
             <div>
-              {% if field.label.text == "Mark as Completed" %}
-              <div class="form-check form-check-inline">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="CheckCompleted"
-                />
-                <label class="form-check-label" for="CheckCompleted"
-                  >Mark as Completed</label
-                >
+              {% if field.label.text == "Company" %}
+              <div>
+                {{ field.label(class_="form-label fw-semibold") }} {{
+                field(class_="form-select") }}
               </div>
               {% else %} {{ field.label(class_="form-label fw-semibold") }} {{
               field(class_="form-control") }} {% endif %}
@@ -62,19 +55,71 @@ endblock %} {% block content %}
   </div>
 </div>
 
+<!-- New Contact Modal -->
+<div
+  class="modal fade"
+  id="detailContactModal"
+  tabindex="-1"
+  aria-labelledby="detailContactModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog w-75">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="detailContactModalLabel">
+          Add Contact
+        </h1>
+      </div>
+      <div class="modal-body">
+        <form method="POST" id="detail_contact_form">
+          {{ detail_contact_form.hidden_tag() }} {% for field in
+          detail_contact_form if field.widget.input_type != 'hidden' %} {% for
+          error in field.errors %}
+          <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+          <div>
+            {% if field.label.text == "Company" %}
+            <div>
+              {{ field.label(class_="form-label fw-semibold") }} {{
+              field(class_="form-select") }}
+            </div>
+            {% else %} {{ field.label(class_="form-label fw-semibold") }} {{
+            field(class_="form-control") }} {% endif %}
+          </div>
+          <br />
+          {% endfor %}
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Discard
+        </button>
+        <button type="button" class="btn btn-appliquest" id="create-contact">
+          Save Contact
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!------------->
 <div class="contact-panel container-fluid mt-3 pt-3">
   <div>
     <div class="row">
-      <div class="col d-flex justify-content-between align-items-center">
-        <h2 id="tasks-cat" class="m-5 title">Contacts</h2>
-      </div>
-      <div class="col">
+      <div class="col-3 mt-3">
         <img
           src="static/images/Online connection-rafiki.svg"
           alt=""
           width="70%"
         />
-        <div class="float-end">
+      </div>
+      <div class="col">
+        <div
+          class="d-flex justify-content-between align-items-center mb-3 mt-3"
+        >
+          <h2 id="tasks-cat" class="m-5 title">Contacts</h2>
+
           <button
             class="btn btn-warning btn-sm"
             data-bs-toggle="modal"
@@ -83,42 +128,54 @@ endblock %} {% block content %}
             + New Contact
           </button>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="row">
-    {% for contact in contacts %}
-    <div class="col">
-      <div class="card contact-card mb-3" data-contactID="{{contact.id}}">
-        <div class="card-body">
-          <h5 class="card-title">
-            {{ contact.first_name }} {{ contact.last_name }}
-          </h5>
-          <h6 class="mb-3">{{contact.company.company_name}}</h6>
-          <hr />
-          <h6 class="card-subtitle mb-2 text-muted">
-            <i class="fa-solid fa-envelope"></i> {{ contact.email }}
-          </h6>
-          <p class="card-text">
-            <i class="fa-solid fa-phone"></i> {{ contact.phone }}
-          </p>
-          <span class="ms-auto">
-            <a href="#" class="edit-contact">
-              <i class="fa-solid fa-user-pen"></i
-            ></a>
-          </span>
-          &emsp;
-          <span class="ms-auto">
-            <a href="#" class="delete-contact"
-              ><i class="fa-solid fa-trash-can"></i> </a
-          ></span>
+        <div class="row" style="height: calc(100vh - 300px); overflow-y: auto">
+          {% for contact in contacts %}
+          <div class="col-12 col-md-4 col-sm-6">
+            <div class="card contact-card mb-3" data-contactID="{{contact.id}}">
+              <div
+                class="card-body ps-2"
+                style="overflow: hidden; text-overflow: ellipsis"
+              >
+                <h5 class="card-title">
+                  {{ contact.first_name }} {{ contact.last_name }}
+                </h5>
+                <h6 class="mb-3">{{contact.company.company_name}}</h6>
+                <hr />
+                <h6
+                  class="card-subtitle mb-2 text-muted"
+                  style="overflow: hidden; text-overflow: ellipsis"
+                >
+                  <i class="fa-solid fa-envelope"></i> {{ contact.email }}
+                </h6>
+                <p
+                  class="card-text"
+                  style="
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                  "
+                >
+                  <i class="fa-solid fa-phone"></i> {{ contact.phone }}
+                </p>
+                <span class="ms-auto">
+                  <a href="#" class="edit-contact">
+                    <i class="fa-solid fa-user-pen"></i
+                  ></a>
+                </span>
+                &emsp;
+                <span class="ms-auto">
+                  <a href="#" class="delete-contact"
+                    ><i class="fa-solid fa-trash-can"></i> </a
+                ></span>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
         </div>
       </div>
     </div>
-
-    {% endfor %}
   </div>
 </div>
-
 {% endblock %}
