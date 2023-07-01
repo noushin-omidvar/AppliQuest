@@ -227,8 +227,6 @@ async function main() {
     e.preventDefault();
     console.log($(e.target));
 
-    // user_id = localStorage.getItem("user_id");
-
     job_id = e.target.closest(".job-card").dataset.job_id;
     localStorage.setItem("job_id", job_id);
     job_resp = await axios.get(`/api/v1/users/${user_id}/jobs/${job_id}`);
