@@ -234,15 +234,20 @@ class Document(db.Model):
     user_id = db.Column(UUID(as_uuid=True),
                         db.ForeignKey('users.id'))
 
-    title = db.Column(db.String,
-                      nullable=False)
+    original_filename = db.Column(db.String(100))
+    filename = db.Column(db.String(100))
+    bucket = db.Column(db.String(100))
 
-    category = db.Column(db.String,
+    category = db.Column(db.String(100),
                          nullable=False)
 
-    file = db.Column(db.LargeBinary, nullable=False)
-
     created_at = db.Column(
+        db.Date,
+        nullable=True,
+        default=date.today(),
+    )
+
+    modified_at =  db.Column(
         db.Date,
         nullable=True,
         default=date.today(),
