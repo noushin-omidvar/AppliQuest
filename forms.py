@@ -186,8 +186,8 @@ class AddDocumentForm(FlaskForm):
         self.category.choices = ['Cover Letter',
                                  'Resume', 'Transcript', 'Certificate']
 
-    document = FileField('Document', validators=[DataRequired()])
-    title = StringField('Title', validators=[DataRequired()])
+    file_to_save = FileField('Document', validators=[DataRequired()])
+    file_name = StringField('File Name', validators=[DataRequired()])
     category = SelectField('Category')
     submit = SubmitField('Upload')
 
