@@ -219,13 +219,13 @@ def show_documents():
                            datetime = datetime)
 
 
-@app.route('/map')
-def show_map():
-    if not g.user:
-        return render_template('index.html')
+# @app.route('/map')
+# def show_map():
+#     if not g.user:
+#         return render_template('index.html')
 
 
-    return render_template('users/map.html')
+#     return render_template('users/map.html')
 
 
 @app.route('/plot_data')
