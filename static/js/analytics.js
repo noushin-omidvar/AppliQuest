@@ -23,7 +23,6 @@
 
 document.addEventListener("DOMContentLoaded", async function () {
   const userId = localStorage.getItem("user_id");
-  console.log(`api/v1/users/${userId}/jobs`);
 
   resp = await axios.get(`api/v1/users/${userId}/jobs`);
   data = resp.data.jobs;
@@ -42,10 +41,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const sortedStatusCounts = statuses.map((status) => statusCounts[status]);
 
-  console.log("Job status counts:");
-  for (const [status, count] of Object.entries(statusCounts)) {
-    console.log(`${status}: ${count}`);
-  }
+  // console.log("Job status counts:");
+  // for (const [status, count] of Object.entries(statusCounts)) {
+  //   console.log(`${status}: ${count}`);
+  // }
 
   const funnelChart = document.getElementById("funnelChart").getContext("2d");
   new Chart(funnelChart, {
@@ -102,7 +101,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const filteredData = data.filter((dataPoint) => {
     const date = new Date(dataPoint.created_at);
-    console.log(date);
     return date >= oneYearAgo;
   });
 
