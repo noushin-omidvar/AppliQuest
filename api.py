@@ -1,6 +1,11 @@
+import uuid
+import boto3 
+import botocore
 from datetime import date
 from flask import Blueprint, session, jsonify, request
 from models import db, User, Job, Company, Document, Task, Contact
+
+
 
 CURR_USER_KEY = "curr_user"
 
@@ -230,17 +235,35 @@ def delete_contact(contact_id, user_id):
 # -------------------------
 
 @api_bp.route('/users/<user_id>/documents', methods=['POST'])
-def create_document():
+def create_document(user_id):
     """Create a new document"""
 
-    new_document = Document(user_id=request.json['user_id'],
-                            job_id=request.json['job_id'],
-                            title=request.json['title'],
-                            category=request.json['category'],
-                            file_url=request.json['file_url'])
+    
+    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'doc', 'docx'}
 
+    def allowed_file(filename):
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    print(request.files)
+    uploaded_file = request.files["file_to_save"]
+    if not allowed_file(uploaded_file.filename):
+                return "FILE NOT ALLOWED!"
+    
+    new_filename = uuid.uuid4().hex + '.' + uploaded_file.filename.rsplit('.', 1)[1].lower()
+
+    bucket_name = "appliquest"
+    s3 = boto3.resource("s3")
+    s3.Bucket(bucket_name).upload_fileobj(uploaded_file, new_filename)
+
+    print(request.form.get('category'))
+
+    new_document = Document(user_id=user_id,
+                            category=request.form.get('category'),
+                            original_filename=uploaded_file.filename, 
+                            filename=new_filename,
+                            bucket=bucket_name,)
     db.session.add(new_document)
     db.session.commit()
+
     return jsonify(new_document=new_document.to_dict())
 
 
@@ -251,6 +274,26 @@ def get_document(user_id, document_id):
     document = Document.query.get_or_404(document_id)
     print(document)
     return jsonify(document=document.to_dict())
+
+@api_bp.route('/documents/<document_id>/file', methods=['GET'])
+def get_document_file(document_id):
+    document = Document.query.get(document_id)
+    if not document:
+        return "Document not found", 404
+
+    s3 = boto3.client('s3')
+    try:
+        # Generate a presigned URL for accessing the photo in the S3 bucket
+        presigned_url = s3.generate_presigned_url(
+            'get_object',
+            Params={'Bucket': document.bucket, 'Key': document.filename},
+            ExpiresIn=3600  # Set the URL expiration time as per your requirements
+        )
+        
+        # Return the presigned URL to the browser
+        return presigned_url
+    except botocore.exceptions.ClientError as e:
+        return "Failed to retrieve file from S3", 500
 
 
 @api_bp.route('/users/<user_id>/documents/<document_id>', methods=['PATCH'])
@@ -275,10 +318,14 @@ def delete_document(user_id, document_id):
 
     # Retrieve the document from the database
     document = Document.query.get_or_404(document_id)
+    client = boto3.client('s3')
 
     if document is None:
         # Return a 404 error if the document is not found
         return jsonify({'error': 'Document not found'}), 404
+
+    client.delete_object(Bucket='appliquest', Key=document.file_name)
+
 
     db.session.delete(document)
     db.session.commit()

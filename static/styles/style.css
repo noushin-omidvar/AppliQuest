@@ -228,3 +228,11 @@ select[data-placeholder] option[value=""] {
 .contact-card.card-body{
   text-overflow: ellipsis;
 }
+
+#drop_zone {
+  border: 5px solid blue;
+  width: 200px;
+  height: 100px;
+}
+
+

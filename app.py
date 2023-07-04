@@ -215,7 +215,17 @@ def show_documents():
     return render_template('users/documents.html',
                            documents=documents,
                            new_document_form=new_document_form,
-                           detail_document_form=detail_document_form)
+                           detail_document_form=detail_document_form,
+                           datetime = datetime)
+
+
+@app.route('/map')
+def show_map():
+    if not g.user:
+        return render_template('index.html')
+
+
+    return render_template('users/map.html')
 
 
 @app.route('/plot_data')

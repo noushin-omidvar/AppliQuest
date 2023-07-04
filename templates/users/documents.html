@@ -1,0 +1,208 @@
+{% extends 'base_login.html' %} {% block title %}AppliQuest: Document board{%
+endblock %} {% block content %}
+
+<div class="container mt-60">
+  <!-- New Document Modal -->
+  <div
+    class="modal fade"
+    id="newDocumentModal"
+    tabindex="-1"
+    aria-labelledby="newDocumentModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog w-75">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="newDocumentModalLabel">
+            Add Document
+          </h1>
+        </div>
+        <div class="modal-body">
+          <form method="POST" id="new_document_form">
+            {{ new_document_form.hidden_tag() }} {% for field in
+            new_document_form if field.widget.input_type != 'hidden' %} {% for
+            error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %} {% endfor %}
+            <div class="mb-3">
+              <label for="file-to-save" class="form-label">File</label>
+              <input class="form-control" type="file" id="file-to-save" />
+            </div>
+
+            <div class="mb-3">
+              <label for="file-name" class="form-label">File Name</label>
+              <input class="form-control" type="text" id="file-name" />
+            </div>
+
+            <div class="form-floating">
+              <select class="form-select" id="category">
+                <option selected>Select the file category</option>
+                <option value="Resume">Resume</option>
+                <option value="Transcript">Transcript</option>
+                <option value="Cover Letter">Cover Letter</option>
+                <option value="Certificate">Certificate</option>
+              </select>
+              <label for="category">Category</label>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Discard
+          </button>
+          <button type="button" class="btn btn-appliquest" id="create-document">
+            Save Document
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Document Modal -->
+<div
+  class="modal fade"
+  id="detailDocumentModal"
+  tabindex="-1"
+  aria-labelledby="detailDocumentModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog w-95">
+    <div class="modal-content">
+      <div class="row">
+        <div class="col">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="detailDocumentModalLabel">
+              Edit Document
+            </h1>
+          </div>
+          <div class="modal-body">
+            <form method="POST" id="detail_document_form">
+              {{ detail_document_form.hidden_tag() }} {% for field in
+              detail_document_form if field.widget.input_type != 'hidden' %} {%
+              for error in field.errors %}
+              <span class="text-danger">{{ error }}</span>
+              {% endfor %}
+              <div>
+                {% if field.label.text == "Company" %}
+                <div>
+                  {{ field.label(class_="form-label fw-semibold") }} {{
+                  field(class_="form-select") }}
+                </div>
+                {% else %} {{ field.label(class_="form-label fw-semibold") }} {{
+                field(class_="form-control") }} {% endif %}
+              </div>
+              <br />
+              {% endfor %}
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Discard
+            </button>
+            <button type="button" class="btn btn-appliquest" id="edit-document">
+              Save Document
+            </button>
+          </div>
+        </div>
+        <div class="col">
+          <div id="file-display"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!------------->
+<div class="document-panel container-fluid mt-3 pt-3">
+  <div>
+    <div class="row">
+      <div class="col-3 mt-3">
+        <img
+          src="static/images/Online connection-rafiki.svg"
+          alt=""
+          width="70%"
+        />
+      </div>
+      <div class="col">
+        <div
+          class="d-flex justify-content-between align-items-center mb-3 mt-3"
+        >
+          <h2 id="tasks-cat" class="m-5 title">Documents</h2>
+
+          <button
+            class="btn btn-warning btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#newDocumentModal"
+          >
+            + New Document
+          </button>
+        </div>
+
+        <div class="row" style="height: calc(100vh - 300px); overflow-y: auto">
+          {% for document in documents %}
+          <div class="col-12 col-md-4 col-sm-6">
+            <div
+              class="card document-card mb-3 text-center"
+              data-documentID="{{document.id}}"
+            >
+              <div
+                class="card-body ps-2"
+                style="overflow: hidden; text-overflow: ellipsis"
+              >
+                <h5 class="card-title">{{ document.file_name }}</h5>
+                <p class="mb-3">{{document.category}}</p>
+                <hr />
+                <h1
+                  class="card-subtitle mb-2 text-muted"
+                  style="overflow: hidden; text-overflow: ellipsis"
+                >
+                  <i class="fa-regular fa-file-pdf"></i>
+                </h1>
+                <p
+                  class="card-text"
+                  style="
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                  "
+                >
+                  {{ document.user.first_name }} {{ document.user.last_name }}
+                </p>
+                <p>
+                  {% set today = datetime.utcnow().date() %} {% set days_passed
+                  = (today - document.modified_at).days %}
+
+                  <small> updated {{ days_passed }} days ago</small>
+                </p>
+                <span class="ms-auto">
+                  <a href="#" class="edit-document">
+                    <i class="fa-solid fa-pen-to-square"></i
+                  ></a>
+                </span>
+                &emsp;
+                <span class="ms-auto">
+                  <a href="#" class="delete-document"
+                    ><i class="fa-solid fa-trash-can"></i> </a
+                ></span>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

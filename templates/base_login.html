@@ -19,6 +19,12 @@
       rel="stylesheet"
     />
 
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.5/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js"></script>
     <script
@@ -115,6 +121,9 @@
     </ul>
     {% block content %} {% endblock %}
 
+    <script src="build/pdf.js"></script>
+    <script src="build/pdf.worker.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-funnel@4.0.0-alpha.1
@@ -124,7 +133,7 @@
     <script src="static/js/documents.js"></script>
     <script src="static/js/contacts.js"></script>
     <script src="static/js/tasks.js"></script>
-    <script src="static/js/maps.js"></script>
+    <script src="static/js/map.js"></script>
     <script src="static/js/analytics.js"></script>
     <script src="static/js/board.js"></script>
   </body>

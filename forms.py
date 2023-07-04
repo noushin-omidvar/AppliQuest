@@ -189,7 +189,7 @@ class AddDocumentForm(FlaskForm):
     file_to_save = FileField('Document', validators=[DataRequired()])
     file_name = StringField('File Name', validators=[DataRequired()])
     category = SelectField('Category')
-    submit = SubmitField('Upload')
+    # submit = SubmitField('Upload')
 
 
 class detailDocumentForm(FlaskForm):

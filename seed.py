@@ -101,7 +101,7 @@ with app.app_context():
         company = random.choice(companies)
         first_name = fake.first_name()
         last_name = fake.last_name()
-        email = fake.email()
+        email = first_name+'.'+last_name +'@example.com'
         phone = fake.phone_number()
         notes = fake.text()
 
@@ -112,35 +112,37 @@ with app.app_context():
         contacts.append(contact)
     db.session.commit()
 
-    # Generate five fake documents and associate them with users and jobs
-    for i in range(5):
-        user = random.choice(users)
-        job = random.choice(jobs)
-        title = fake.text(max_nb_chars=20)
-        category = random.choice(
-            ['Cover Letter', 'Resume', 'Transcript', 'Certificate'])
-        TEMPLATE = """
-            {{name}}
-            {{address}}
-            {{phone_number}}
+    # # Generate five fake documents and associate them with users and jobs
+    # for i in range(5):
+    #     user = random.choice(users)
+    #     job = random.choice(jobs)
+    #     title = fake.text(max_nb_chars=20)
+    #     category = random.choice(
+    #         ['Cover Letter', 'Resume', 'Transcript', 'Certificate'])
+    #     TEMPLATE = """
+    #         {{name}}
+    #         {{address}}
+    #         {{phone_number}}
 
-            {{text}} {{text}} {{text}}
+    #         {{text}} {{text}} {{text}}
 
-            {{text}} {{text}} {{text}}
+    #         {{text}} {{text}} {{text}}
 
-            {{text}} {{text}} {{text}}
+    #         {{text}} {{text}} {{text}}
             
-            """
+    #         """
 
-        file = fake.pdf_file(
-            content=TEMPLATE, wrap_chars_after=80).encode('utf-8')
 
-        document = Document(user_id=user.id,
-                            title=title, category=category, file=file)
-        db.session.add(document)
-        documents.append(document)
 
-    db.session.commit()
+    #     file = fake.pdf_file(
+    #         content=TEMPLATE, wrap_chars_after=80).encode('utf-8')
+
+    #     document = Document(user_id=user.id,
+    #                         title=title, category=category, file=file)
+    #     db.session.add(document)
+    #     documents.append(document)
+
+    # db.session.commit()
 
     # Generate five fake tasks and associate them with users and jobs
     for i in range(50):
