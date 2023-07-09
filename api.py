@@ -1,10 +1,10 @@
 import uuid
-import boto3 
+import boto3
 import botocore
+import googlemaps
 from datetime import date
 from flask import Blueprint, session, jsonify, request
 from models import db, User, Job, Company, Document, Task, Contact
-
 
 
 CURR_USER_KEY = "curr_user"
@@ -119,7 +119,8 @@ def create_job(user_id):
 def get_jobs(user_id):
     """get job by job_id"""
 
-    jobs = [ job.to_dict() for job in Job.query.filter(Job.user_id== user_id).all()]
+    jobs = [job.to_dict()
+            for job in Job.query.filter(Job.user_id == user_id).all()]
 
     return jsonify(jobs=jobs)
 
@@ -135,16 +136,14 @@ def get_job(user_id, job_id):
 @api_bp.route('/users/<user_id>/jobs/<job_id>', methods=['PATCH'])
 def update_job(user_id, job_id):
     """Update the job """
-    print(request.json)
     job = Job.query.get(job_id)
     if job is None:
         return jsonify({'error': 'Job not found'}), 404
 
-
     db.session.query(Job).filter(
         Job.id == job_id).update(request.json)
     db.session.query(Job).filter(
-        Job.id == job_id).update({'modified_at':date.today()})
+        Job.id == job_id).update({'modified_at': date.today()})
     db.session.commit()
 
     return jsonify(job.to_dict())
@@ -206,7 +205,8 @@ def update_contact(user_id, contact_id):
     if contact is None:
         # Return a 404 error if the contact is not found
         return jsonify({'error': 'Contact not found'}), 404
-    db.session.query(Contact).filter(Contact.id == contact_id, Contact.user_id == user_id).update(request.json)
+    db.session.query(Contact).filter(Contact.id == contact_id,
+                                     Contact.user_id == user_id).update(request.json)
     db.session.commit()
 
     # Return the updated contact data
@@ -238,27 +238,25 @@ def delete_contact(contact_id, user_id):
 def create_document(user_id):
     """Create a new document"""
 
-    
-    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'doc', 'docx'}
+    ALLOWED_EXTENSIONS = {'pdf'}
 
     def allowed_file(filename):
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    print(request.files)
     uploaded_file = request.files["file_to_save"]
     if not allowed_file(uploaded_file.filename):
-                return "FILE NOT ALLOWED!"
-    
-    new_filename = uuid.uuid4().hex + '.' + uploaded_file.filename.rsplit('.', 1)[1].lower()
+        return "FILE NOT ALLOWED!"
+
+    new_filename = uuid.uuid4().hex + '.' + \
+        uploaded_file.filename.rsplit('.', 1)[1].lower()
 
     bucket_name = "appliquest"
     s3 = boto3.resource("s3")
-    s3.Bucket(bucket_name).upload_fileobj(uploaded_file, new_filename)
-
-    print(request.form.get('category'))
+    s3.Bucket(bucket_name).upload_fileobj(uploaded_file, new_filename,
+                                          ExtraArgs={'ContentType': "application/pdf", 'Metadata': {'Content-Disposition': ''}})
 
     new_document = Document(user_id=user_id,
                             category=request.form.get('category'),
-                            original_filename=uploaded_file.filename, 
+                            original_filename=uploaded_file.filename,
                             filename=new_filename,
                             bucket=bucket_name,)
     db.session.add(new_document)
@@ -272,8 +270,8 @@ def get_document(user_id, document_id):
     """get document by document_id"""
 
     document = Document.query.get_or_404(document_id)
-    print(document)
     return jsonify(document=document.to_dict())
+
 
 @api_bp.route('/documents/<document_id>/file', methods=['GET'])
 def get_document_file(document_id):
@@ -289,7 +287,7 @@ def get_document_file(document_id):
             Params={'Bucket': document.bucket, 'Key': document.filename},
             ExpiresIn=3600  # Set the URL expiration time as per your requirements
         )
-        
+
         # Return the presigned URL to the browser
         return presigned_url
     except botocore.exceptions.ClientError as e:
@@ -324,8 +322,7 @@ def delete_document(user_id, document_id):
         # Return a 404 error if the document is not found
         return jsonify({'error': 'Document not found'}), 404
 
-    client.delete_object(Bucket='appliquest', Key=document.file_name)
-
+    client.delete_object(Bucket='appliquest', Key=document.filename)
 
     db.session.delete(document)
     db.session.commit()
@@ -351,33 +348,6 @@ def create_task(user_id):
     db.session.add(new_task)
     db.session.commit()
     return jsonify(new_task=new_task.to_dict())
-
-
-# @api_bp.route('/users/<user_id>/tasks/cats/<task_cat>')
-# def get_tasks(user_id, task_cat):
-#     """get tasks of user by category"""
-#     if task_cat == 'All':
-#         tasks = Task.query.filter(user_id == user_id).all()
-#     elif task_cat == 'Due Today':
-#         tasks = Task.query.filter(user_id == user_id, Task.due_date == date.today()).all()
-#     elif task_cat == 'Past Due':
-#         tasks = Task.query.filter(user_id == user_id, Task.due_date < date.today()).all()
-#     elif task_cat == 'Completed':
-#         tasks = Task.query.filter(user_id == user_id, Task.completed == True).all()
-
-#     elif task_cat == 'Wishlists':
-#         tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Wishlist').all()
-#     elif task_cat == 'Applications':
-#         tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Applied').all()
-#     elif task_cat == 'Interviews':
-#         tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Interview').all()
-#     elif task_cat == 'Offers':
-#         tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Offer').all()
-#     elif task_cat == 'Rejections':
-#         tasks = Task.query.filter(user_id == user_id, Task.job.status == 'Rejected').all()
-
-#     tasks = [task.to_dict() for task in tasks]
-#     return jsonify(tasks=tasks)
 
 
 @api_bp.route('/users/<user_id>/tasks/<task_id>')
@@ -456,7 +426,7 @@ def update_company(user_id, company_id):
         # Return a 404 error if the company is not found
         return jsonify({'error': 'Company not found'}), 404
 
-    db.session.query(Company).filter(id==company_id).update(request.json)
+    db.session.query(Company).filter(id == company_id).update(request.json)
     db.session.commit()
 
     # Return the updated company data
@@ -496,3 +466,19 @@ def list_company():
     companies = [c.to_dict() for c in Company.query.all()]
 
     return jsonify(companies=companies)
+
+
+@api_bp.route('/users/<user_id>/map', methods=['GET'])
+def get_job_locations(user_id):
+    user_jobs = Job.query.filter_by(user_id=user_id).all()
+    job_locations = [job.job_location for job in user_jobs if job.job_location]
+    locations = []
+    for city in job_locations:
+        gmaps = googlemaps.Client(api_key='YOUR_API_KEY')
+        geocode_result = gmaps.geocode(city)
+        if geocode_result:
+            latitude = geocode_result[0]['geometry']['location']['lat']
+            longitude = geocode_result[0]['geometry']['location']['lng']
+            locations.append(
+                {'city': city, 'latitude': latitude, 'longitude': longitude})
+    return jsonify(locations)

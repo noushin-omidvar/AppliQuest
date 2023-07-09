@@ -1,5 +1,5 @@
 import os
-
+import googlemaps
 from flask import Flask, render_template, session, g, redirect, flash, jsonify, request
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
@@ -102,7 +102,6 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        print("validate")
         user = User.authenticate(form.email.data,
                                  form.password.data)
 
@@ -125,7 +124,9 @@ def logout():
 
     return redirect('/')
 
+# ------------------------
 # Define general routes
+# -------------------------
 
 
 @app.route('/')
@@ -156,8 +157,8 @@ def show_board():
     return render_template('users/board.html', user_id=g.user.id,
                            jobs=jobs,
                            new_job_form=new_job_form,
-                           job_detail_form=job_detail_form, 
-                           datetime = datetime)
+                           job_detail_form=job_detail_form,
+                           datetime=datetime)
 
 
 @app.route('/tasks')
@@ -169,7 +170,6 @@ def show_tasks():
 
     jobs = Job.query.filter(Job.user_id == g.user.id).all()
     new_task_form = AddTaskForm(jobs)
-    print(jobs)
     task_detail_form = TaskDetailForm(jobs)
 
     tasks = {'All': Task.query.filter(Task.user_id == g.user.id).all(),
@@ -186,7 +186,7 @@ def show_tasks():
     return render_template('users/tasks.html', user_id=g.user.id,
                            tasks=tasks,
                            new_task_form=new_task_form,
-       task_detail_form=task_detail_form)
+                           task_detail_form=task_detail_form)
 
 
 @app.route('/contacts')
@@ -195,7 +195,6 @@ def show_contacts():
         return render_template('index.html')
 
     contacts = Contact.query.filter(Contact.user_id == g.user.id).all()
-    print(contacts)
     new_contact_form = AddContactForm()
     detail_contact_form = detailContactForm()
     return render_template('users/contacts.html',
@@ -216,38 +215,32 @@ def show_documents():
                            documents=documents,
                            new_document_form=new_document_form,
                            detail_document_form=detail_document_form,
-                           datetime = datetime)
+                           datetime=datetime)
 
 
-# @app.route('/map')
-# def show_map():
-#     if not g.user:
-#         return render_template('index.html')
+@app.route('/map')
+def show_map():
+    if not g.user:
+        return render_template('index.html')
+    google_map_api_key = os.environ.get('GOOGLE_MAP_API_KEY')
+    gmaps = googlemaps.Client(api_key=google_map_api_key)
 
+    user_jobs = Job.query.filter_by(user_id=g.user.id).all()
+    job_locations = [job.job_location for job in user_jobs if job.job_location]
+    marker_locations = []
+    for city in job_locations:
+        geocode_result = gmaps.geocode(city)
+        if geocode_result:
+            latitude = geocode_result[0]['geometry']['location']['lat']
+            longitude = geocode_result[0]['geometry']['location']['lng']
+            marker_locations.append(
+                {'city': city, 'latitude': latitude, 'longitude': longitude})
 
-#     return render_template('users/map.html')
-
-
-@app.route('/plot_data')
-def plot_data():
-    # Create a sample data set for the plot
-    x = [1, 2, 3]
-    y = [4, 5, 6]
-
-    # Create the plot using Plotly
-    data = [go.Scatter(x=x, y=y)]
-    layout = go.Layout(title='Plot Data')
-    fig = go.Figure(data=data, layout=layout)
-    plot_html = opy.plot(fig, auto_open=False, output_type='div')
-
-    # Return the Plotly output as HTML
-    return plot_html
+    return render_template('users/map.html',  marker_locations=marker_locations)
 
 
 @app.route('/analytics')
 def plot():
-
-    # plot_html = job_search_funnel_plot()
-    # plot_timeline = job_search_timeline()
     # # Render the template with the plot data
-    return render_template('users/analytics.html')#, plot_html=plot_html, plot_timeline=plot_timeline)
+    # , plot_html=plot_html, plot_timeline=plot_timeline)
+    return render_template('users/analytics.html')

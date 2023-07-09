@@ -30,30 +30,7 @@ endblock %} {% block content %}
         </div>
       </div>
 
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="card-title mb-2">
-            <h6>Job Search Funnel</h6>
-            <div id="chartContainer">
-              <canvas id="jobTimeChart"></canvas>
-              <div id="chartButtons">
-                <button class="chart-button" data-interval="day">Daily</button>
-                <button class="chart-button" data-interval="week">
-                  Weekly
-                </button>
-                <button class="chart-button" data-interval="month">
-                  Monthly
-                </button>
-              </div>
-            </div>
-          </div>
-          <div>
-            <canvas id="jobTimeChart"></canvas>
-          </div>
-        </div>
-      </div>
+      {% endblock %}
     </div>
-
-    {% endblock %}
   </div>
 </div>

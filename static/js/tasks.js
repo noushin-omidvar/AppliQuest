@@ -1,4 +1,3 @@
-// const user_id = localStorage.getItem("user_id");
 $(".form-check-input").on("click", async (e) => {
   const taskItem = e.target.closest(".list-group-item");
   const taskTextElement = taskItem.querySelector(".task-text");
@@ -89,9 +88,7 @@ $(".edit-button").on("click", async function (e) {
   task_resp = await axios.get(`/api/v1/users/${user_id}/tasks/${taskId}`);
   task_data = task_resp.data;
   $("#detail_task_form [name='task']").val(task_data.task.task_title);
-  // document.querySelector("#detail_task_form [name='job']").value =
-  // task_data.task.job_id;
-
+  $("#detail_task_form [name='job']").val(task_data.task.job_id);
   $("#detail_task_form [name='startdate']").val(task_data.task.created_at);
   $("#detail_task_form [name='enddate']").val(task_data.task.due_date);
   $("#detail_task_form [name='notes']").val(task_data.task.notes);
@@ -99,8 +96,6 @@ $(".edit-button").on("click", async function (e) {
 
   // Creat new task
   $("button#create-task").on("click", async function (e) {
-    console.log(e.target);
-    console.log("hi");
     task_title = $("#detail_task_form [name='task']").val();
     job = $("#detail_task_form [name='job']").val();
 

@@ -1,8 +1,10 @@
-/** Get user_id from the serverside */
+/** Get user_id from the server side */
 function get_user_id() {
-  userId = localStorage.getItem("user_id");
+  let userId = localStorage.getItem("user_id");
   return userId;
 }
+
+const user_id = localStorage.getItem("user_id");
 
 async function main() {
   /** Implementing the drag and drop of Kanban items */
@@ -13,16 +15,16 @@ async function main() {
     document.querySelector("#Offer"),
     document.querySelector("#Rejected"),
   ]).on("drop", async function (el, target, source, sibling) {
-    user_id = localStorage.getItem("user_id");
-    job_id = el.dataset.job_id;
-    today = new Date();
+    let user_id = localStorage.getItem("user_id");
+    let job_id = el.dataset.job_id;
+    let today = new Date();
 
-    resp = await axios.get(`/api/v1/users/${user_id}/jobs/${job_id}`);
+    let resp = await axios.get(`/api/v1/users/${user_id}/jobs/${job_id}`);
 
     const formattedDate = today
       .toUTCString()
       .replace(/\d{2}:\d{2}:\d{2}/, "00:00:00");
-    await axios.patch(`/api/v1/users/${user_id}/jobs/${job_id}`, {
+    resp = await axios.patch(`/api/v1/users/${user_id}/jobs/${job_id}`, {
       status: target.id,
       modified_at: formattedDate,
     });
@@ -160,9 +162,6 @@ async function main() {
     let company_name = $("#company_name").val();
     let status = $("#status").val();
 
-    console.log(company_name);
-    console.log(Object.keys(company_dict));
-
     if (!(company_name in Object.keys(company_dict))) {
       let resp = await axios.post("/api/v1/companies", {
         company_name: company_name,
@@ -225,7 +224,6 @@ async function main() {
   //SHow job detail form
   $(document).on("click", ".job-card", async function (e) {
     e.preventDefault();
-    console.log($(e.target));
 
     job_id = e.target.closest(".job-card").dataset.job_id;
     localStorage.setItem("job_id", job_id);
@@ -247,7 +245,6 @@ async function main() {
       window.open(job_data.job.post_url);
       return;
     } else if ($(e.target).hasClass("delete-job")) {
-      console.log(e.target);
       resp_del = await axios.delete(`/api/v1/users/${user_id}/jobs/${job_id}`);
       e.target.closest(".job-card").remove();
       return;

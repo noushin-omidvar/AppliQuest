@@ -72,7 +72,10 @@ endblock %} {% block content %}
   aria-labelledby="detailDocumentModalLabel"
   aria-hidden="true"
 >
-  <div class="modal-dialog w-95">
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+    style="max-width: 95%"
+  >
     <div class="modal-content">
       <div class="row">
         <div class="col">
@@ -116,7 +119,7 @@ endblock %} {% block content %}
           </div>
         </div>
         <div class="col">
-          <div id="file-display"></div>
+          <div id="file-display" style="height: 100%" class="'pb-2"></div>
         </div>
       </div>
     </div>

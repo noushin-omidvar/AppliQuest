@@ -35,7 +35,10 @@ endblock %} {% block content %}
                   >Mark as Completed</label
                 >
               </div>
-              {% else %} {{ field.label(class_="form-label fw-semibold") }} {{
+              {% elif field.label.text == "Job" %} {{
+              field.label(class_="form-label fw-semibold") }} {{
+              field(class_="form-select") }} {% else %} {{
+              field.label(class_="form-label fw-semibold") }} {{
               field(class_="form-control") }} {% endif %}
             </div>
             <br />

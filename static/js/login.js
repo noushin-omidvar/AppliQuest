@@ -11,7 +11,6 @@ $loginForm.on("submit", function (event) {
     .then(function (response) {
       // Check if login was successful
       if (response.data.hasOwnProperty("user_id")) {
-        console.log(response.data.user_id);
         // Store user ID in local storage
         localStorage.setItem("user_id", response.data.user_id);
 

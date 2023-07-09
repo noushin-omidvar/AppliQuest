@@ -127,10 +127,10 @@ endblock %} {% block content %}
 
         <div class="row" style="height: calc(100vh - 300px); overflow-y: auto">
           {% for contact in contacts %}
-          <div class="col-12 col-md-4 col-sm-6">
+          <div class="col-12 col-md-6 col-sm-6">
             <div class="card contact-card mb-3" data-contactID="{{contact.id}}">
               <div
-                class="card-body ps-2"
+                class="card-body ps-3"
                 style="overflow: hidden; text-overflow: ellipsis"
               >
                 <h5 class="card-title">
