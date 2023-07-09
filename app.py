@@ -160,7 +160,7 @@ def show_board():
                            jobs=jobs,
                            new_job_form=new_job_form,
                            job_detail_form=job_detail_form,
-                           datetime=datetime)
+                           datetime=date)
 
 
 @app.route('/tasks')
@@ -217,7 +217,7 @@ def show_documents():
                            documents=documents,
                            new_document_form=new_document_form,
                            detail_document_form=detail_document_form,
-                           datetime=datetime)
+                           datetime=date)
 
 
 @app.route('/map')
