@@ -1,5 +1,3 @@
-// const user_id = localStorage.getItem("user_id");
-
 // Delete button click event handler
 $(".delete-contact").on("click", async function (e) {
   $(this).closest(".contact-card").remove();

@@ -8,8 +8,6 @@ from forms import SignUpForm, LoginForm, AddJobForm, JobDetailForm, AddTaskForm,
 from datetime import date
 from api import api_bp
 
-from analytics import *
-
 
 CURR_USER_KEY = "curr_user_id"
 
