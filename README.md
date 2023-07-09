@@ -95,6 +95,14 @@ The website will include features such as user registration and login, job appli
 ### 4.5 User flow
 The user flow will begin with the user registration and login process. Once logged in, the user will be directed to their personalized dashboard, where they can add and manage their job applications, organize their job search, and track their progress. The website will also provide additional resources and job search tips to help users navigate the job search process.
 
+**Registration:** Users can sign up for an account by providing their basic details.
+**Login:** Users can log in using their credentials to access their personalized dashboard.
+**Dashboard:** Upon logging in, users are directed to their dashboard, where they can view a summary of their job applications, upcoming tasks, and recent activities.
+Users can add new job applications, update application status, and view details of each application, including job title, company, and application history.
+**Document Management:** Users can upload, manage, and access their job-related documents, such as resumes and cover letters.
+**Task Management:** Users can create tasks, set due dates, and track the progress of each task.
+Analytics: Users can access analytics and reports to gain insights into their job search progress and performance.
+
 ### 4.4 Features
 #### 4.4.1 Job application tracking: 
 Users will be able to track the status of their job applications, including the date of application, application status, interview dates, and other relevant details. They will also be able to set reminders and receive notifications for upcoming interview dates.
@@ -118,3 +126,10 @@ The website could integrate with job search engines like Indeed or Glassdoor to 
 #### 4.5.3 Matching algorithm: 
 A matching algorithm could be developed to match job seekers with job openings that fit their skills and qualifications.
 
+## 5 Technology Stack
+The following technologies were used to develop AppliQuest:
+
+Front-end: HTML, CSS, JavaScript, Bootstrap
+Back-end: Python, Flask
+Database: PostgreSQL
+Deployment: Render, Git
