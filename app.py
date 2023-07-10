@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 from models import db, connect_db, User, Job, Company, Document, Task, Contact
 from forms import SignUpForm, LoginForm, AddJobForm, JobDetailForm, AddTaskForm, TaskDetailForm, AddContactForm, detailContactForm, AddDocumentForm, detailDocumentForm
-from datetime import date
+from datetime import date, datetime
 from api import api_bp
 
 
@@ -149,18 +149,19 @@ def show_board():
 
     new_job_form = AddJobForm()
     job_detail_form = JobDetailForm()
-
+    print(g.user.id)
     jobs = {'jobs_wished': Job.get_jobs_by_status(g.user.id, "Wishlist"),
             'jobs_applied': Job.get_jobs_by_status(g.user.id, "Applied"),
             'jobs_interview': Job.get_jobs_by_status(g.user.id, "Interview"),
             'jobs_offer': Job.get_jobs_by_status(g.user.id, "Offer"),
             'jobs_rejected': Job.get_jobs_by_status(g.user.id, "Rejected"), }
 
+    print(jobs)
     return render_template('users/board.html', user_id=g.user.id,
                            jobs=jobs,
                            new_job_form=new_job_form,
                            job_detail_form=job_detail_form,
-                           datetime=date)
+                           datetime=datetime)
 
 
 @app.route('/tasks')

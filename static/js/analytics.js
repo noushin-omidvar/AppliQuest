@@ -5,15 +5,16 @@ document.addEventListener("DOMContentLoaded", async function () {
   data = resp.data.jobs;
   const statuses = ["Wishlist", "Applied", "Interview", "Offer", "Rejected"];
 
-  const statusCounts = {};
-
+  const statusCounts = {
+    Wishlist: 0,
+    Applied: 0,
+    Interview: 0,
+    Offer: 0,
+    Rejected: 0,
+  };
   for (let i = 0; i < data.length; i++) {
     const status = data[i].status;
-    if (status in statusCounts) {
-      statusCounts[status]++;
-    } else {
-      statusCounts[status] = 1;
-    }
+    statusCounts[status]++;
   }
 
   const sortedStatusCounts = statuses.map((status) => statusCounts[status]);
@@ -57,8 +58,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             weight: "thin",
           },
           formatter: function (value, context) {
-            var label = context.chart.data.labels[context.dataIndex];
-            return label + ": " + value.toString();
+            let label = context.chart.data.labels[context.dataIndex];
+            if (typeof value !== "undefined") {
+              return label + ": " + value.toString();
+            } else {
+              return label + ": N/A";
+            }
           },
         },
       },
