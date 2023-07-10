@@ -16,7 +16,7 @@ app.register_blueprint(api_bp, url_prefix='/api/v1')
 # Get DB_URI from environ variable (useful for production/testing) or,
 # if not set there, use the provided database URL.
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'DATABASE_URL', 'postgresql:///appliquest')  # admin:zXRwj5Htsme5Wbwz9ztFX2odGy4Qyiyd@dpg-cilir05ph6eg6k9oj4eg-a/appliquest')
+    'DATABASE_URL', 'postgresql:///appliquest')  # 'postgresql://admin:zXRwj5Htsme5Wbwz9ztFX2odGy4Qyiyd@dpg-cilir05ph6eg6k9oj4eg-a/appliquest')
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

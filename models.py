@@ -247,7 +247,7 @@ class Document(db.Model):
         default=date.today(),
     )
 
-    modified_at =  db.Column(
+    modified_at = db.Column(
         db.Date,
         nullable=True,
         default=date.today(),
@@ -276,8 +276,8 @@ class Task(db.Model):
                        nullable=True)
 
     task_title = db.Column(db.String(20),
-                     nullable=False)
-    
+                           nullable=False)
+
     task = db.Column(db.String,
                      nullable=False)
 

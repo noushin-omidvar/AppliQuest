@@ -24,10 +24,19 @@ async function main() {
     const formattedDate = today
       .toUTCString()
       .replace(/\d{2}:\d{2}:\d{2}/, "00:00:00");
-    resp = await axios.patch(`/api/v1/users/${user_id}/jobs/${job_id}`, {
-      status: target.id,
-      modified_at: formattedDate,
-    });
+
+    if (target.id == "Applied") {
+      resp = await axios.patch(`/api/v1/users/${user_id}/jobs/${job_id}`, {
+        status: target.id,
+        modified_at: formattedDate,
+        application_date: formattedDate,
+      });
+    } else {
+      resp = await axios.patch(`/api/v1/users/${user_id}/jobs/${job_id}`, {
+        status: target.id,
+        modified_at: formattedDate,
+      });
+    }
     location.reload();
   });
 
@@ -150,7 +159,6 @@ async function main() {
 
   $(document).on("click", "#create-job", async function (e) {
     e.preventDefault();
-    user_id = localStorage.getItem("user_id");
     const resp = await axios.get("/api/v1/companies");
     let companies = resp.data["companies"];
     let company_dict = {};
