@@ -1,6 +1,10 @@
 # AppliQuest
 AppliQuest is a job application tracker web app that helps job seekers organize and manage their job applications in one place.
 
+## Project Details
+**Title:** AppliQuest
+**URL:** https://appliquest.onrender.com
+
 ## 1 Goal 
 The primary goal of the Job Application Tracker website is to provide a centralized location for job seekers to manage all aspects of their job search. The website will allow job seekers to keep track of their job applications, organize their job search, and keep all their job search details in one place.
 
@@ -8,7 +12,7 @@ The primary goal of the Job Application Tracker website is to provide a centrali
 The website will be designed for job seekers of all ages and backgrounds who are actively looking for employment. The primary demographic of users will be individuals who are seeking full-time or part-time employment opportunities, including recent graduates, professionals, and individuals who are looking to change careers.
 
 ## 3 Data 
-The website will use job application data such as the company name, job title, application date, status updates, contact details, notes, tasks, documents, job descriptions, salaries, locations, and company data. The data will be collected from job boards and user input, and it will be securely stored in a database.
+The website will use job application data such as the company name, job title, application date, status updates, contact details, notes, tasks, documents, job descriptions, salaries, locations, and company data. The data will be collected from user input, and it will be securely stored in a database.
 
 ## 4 Approach
    
@@ -23,9 +27,10 @@ The database schema will consist of tables for users, jobs, companies, job descr
 |id|unique identifier for each user|
 |first_name |first name of the user|
 |last_name | last name of user |
-|username| username chosen by user|
 |email|email address of the user|
 |password|hashed password for user authentication|
+|linkedin_url| url to user's linkedin profile |
+|user_location| the location of user|
 
 
 |Job| |
@@ -38,17 +43,17 @@ The database schema will consist of tables for users, jobs, companies, job descr
 |application _date|date when the application was submitted|
 |status|status of the application (e.g. applied, interview scheduled, rejected)|
 |notes|any notes or comments about the application|
-|location|location of the job|
-|salary|salary range for the job|
+|job_location|location of the job|
 |job_description|full job description for the job|
+|created_at| date the job created by user|
+|modified_at| date the job modified by user|
 
-|Company |  |
-|-|-|
+|Company|-|
 |id| unique identifier for each job application|
 |company_name| name of the company|
-|location| company location|
+|company_location| company location|
 |company_url| link to the company websit|
-|description| about the company|
+|company_about| about the company|
 
 |Contact| |
 |-------|--|
@@ -67,9 +72,10 @@ The database schema will consist of tables for users, jobs, companies, job descr
 |id|unique identifier for each document|
 |user_id|foreign key to the users table|
 |job_id|foreign key to the jobs table|
-|title|name of the file|
+|originial_filename|name of the file|
 |category|type of the file (e.g. resume, cover letter, transcript)|
-|file_url|URL to access the file|
+|created_at| date the job created by user|
+|modified_at| date the job modified by user|
 
 
 
@@ -78,7 +84,10 @@ The database schema will consist of tables for users, jobs, companies, job descr
 |id|unique identifier for each task|
 |user_id|foreign key to the users table|
 |job_id|foreign key to the jobs table|
-|task_name|name of the task|
+|task_title|title of the task|
+|task| task description|
+|completed|Wheter the task is completed or not |
+|created_at| date the job created by user|
 |due_date|due date for the task|
 |notes|any notes or comments about the task|
 
@@ -97,11 +106,11 @@ The user flow will begin with the user registration and login process. Once logg
 
 **Registration:** Users can sign up for an account by providing their basic details.
 **Login:** Users can log in using their credentials to access their personalized dashboard.
-**Dashboard:** Upon logging in, users are directed to their dashboard, where they can view a summary of their job applications, upcoming tasks, and recent activities.
+**Jobboard:** Upon logging in, users are directed to their jobboard, where they can view a summary of their job application.
 Users can add new job applications, update application status, and view details of each application, including job title, company, and application history.
 **Document Management:** Users can upload, manage, and access their job-related documents, such as resumes and cover letters.
 **Task Management:** Users can create tasks, set due dates, and track the progress of each task.
-Analytics: Users can access analytics and reports to gain insights into their job search progress and performance.
+**Analytics:** Users can access analytics and reports to gain insights into their job search progress and performance.
 
 ### 4.4 Features
 #### 4.4.1 Job application tracking: 
